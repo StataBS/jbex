@@ -1,0 +1,9 @@
+[server]
+enableWebsocketCompression=false
+enableCORS=false
+enableXsrfProtection=false
+
+[theme]
+primaryColor="red"
+textColor="black"
+font="sans serif"
