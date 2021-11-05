@@ -60,7 +60,7 @@ def get_data():
     return metadata
 
 def main():
-    lottie_json = load_lottiefile('images/11793-books-stack.json')
+    lottie_json = load_lottiefile('./images/11793-books-stack.json')
     st.set_page_config(page_title=my_name_short, page_icon='./images/favicon.png', layout='wide', initial_sidebar_state='auto') 
     col1,col2=st.columns([0.4,6])
     with col1:
