@@ -9,6 +9,7 @@ from const import *
 import jbex_find
 import requests
 import json
+import tools
 
 
 __author__ = 'Lukas Calmbach'
@@ -48,7 +49,7 @@ def get_app_info():
     <div id ="appinfo">
     App: {my_name}<br>
     App-Version: {__version__} ({version_date})<br>
-    Implementierung App: Statistisches Amt Basel-Stadt<br>
+    Implementierung App: {tools.get_href('Statistisches Amt Basel-Stadt',URL_STAT_BASEL)}<br>
     Kontakt: <a href="mailto:nathalie.grillon@bs.ch">Nathalie Grillon</a><br>
     </div>
     """

@@ -27,7 +27,7 @@ THEMENBEREICHE = [
 
 TABELLEN_FILE = './data/metadaten.txt'
 URL_BASE = 'https://charts.basleratlas.ch/zahlenspiegel/files/Stat-JB-BS-'
-
+URL_STAT_BASEL = 'https://www.statistik.bs.ch/'
 
 THEMEN = {
 'Bevölkerung': ['Übergeordnete Bevölkerungsentwicklung',

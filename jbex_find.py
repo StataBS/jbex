@@ -117,7 +117,6 @@ class App():
 
         #Angaben zum Filter auf der Seite anzeigen lassen .
         st.markdown(get_filter_description())
-        st.subheader('Liste der Tabellen')
         return [self.metadata_filtered, f['jahrgang'], jahrgang_box]
         
 
@@ -163,6 +162,7 @@ class App():
     def show_menu(self):
         metadata_filtered,jahrgang, jahrgang_box = self.get_tabelle()  
         if jahrgang_box == False:
+            st.subheader('Liste der Tabellen')
             selected = tools.show_table(metadata_filtered, GridUpdateMode.SELECTION_CHANGED, 300)
             if len(selected) > 0:
                 df_selected = tools.make_dataframe(selected)
