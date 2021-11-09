@@ -15,7 +15,7 @@ import tools
 __author__ = 'Lukas Calmbach'
 __version__ = '0.0.9'
 version_date = '2021-10-28'
-my_name = 'Statistisches Jahrbuch Basel-Stadt: Sämtliche Ausgaben durchsuchen'
+my_name = 'Jahrbuch-Suche Basel-Stadt'
 my_name_short = 'JBEx'
 
 
@@ -63,14 +63,21 @@ def get_data():
 def main():
     lottie_json = load_lottiefile('./images/11793-books-stack.json')
     st.set_page_config(page_title=my_name_short, page_icon='./images/favicon.png', layout='wide', initial_sidebar_state='auto') 
-    col1,col2=st.columns([0.4,6])
+    col1,col2=st.columns([0.4,3])
     with col1:
         st_lottie(lottie_json, height=75, width=100,key="lottie1")
     with col2:
         st.header(f"{my_name}")
     st.markdown('##')
     with st.expander("Anleitung zur Suchfunktion"):
-        st.write("Hier kommt die ausführliche Anleitung zur Suchfunktion")
+        st.markdown('''Die vorliegende Anwendung hilft ihnen bei der gezielten Suche nach Jahrbuch-Inhalten. 
+        Sie haben drei Einstiegspunkte: Die Freitextsuche in den Tabellen-Titeln – wobei mehrere Suchbegriffe kombiniert werden können – 
+        ermöglicht ihnen einen raschen Überblick, ob Zahlen zu ihrem Thema vorhanden sind. 
+        Falls sie an einer speziellen Jahrbuch-Ausgabe interessiert sind, gehen sie über den Zugang «Jahrbuch auswählen». 
+        Der thematische Einstieg schliesslich erfolgt über das Feld «Themenbereich» mittels Dropdown-Liste, 
+        wobei die Suche über das Feld «Thema» zusätzlich spezifiziert/eingegrenzt werden kann. 
+        Die Ergebnisse ihrer Suche werden in Form einer Liste mit Tabellen ausgeben...
+        \n Viel Spass bei der Datenrecherche; wir hoffen, sie werden rasch fündig!''')
     st.markdown('##')
 
     metadata = get_data()

@@ -57,6 +57,8 @@ class App():
             if f['themenbereich'] != []:
                 liste_themenbereiche = ", ".join(f['themenbereich'])
             if f['titel']!=[]:
+                for i, wort in enumerate(f['titel']):
+                    f['titel'][i]=wort.capitalize()
                 liste_titel = ", ".join(f['titel'])
             if (f['titel']!=[]) & (f['themenbereich'] == []):
                 if len(f['titel']) > 1:
@@ -114,7 +116,7 @@ class App():
         #Suchparameter: Themenbereiche und die Themen .
         placeholder_themenbereich = st.empty()
         with placeholder_themenbereich.container():
-            st.write("🔎 Suchen sie nach Daten zu einem Themenbereich und Thema, dann benützen Sie folgende Suchfunktionen.")
+            st.write("🔎 Suchen sie nach Daten zu einem Themenbereich und Thema, dann benützen Sie folgende Suchfunktionen.")     
             f['themenbereich'] = st.multiselect('Nach Themenbereich suchen:',options=THEMENBEREICHE, key='multi1')
             themen=[]
             for i in f['themenbereich']:  
@@ -148,7 +150,7 @@ class App():
         jb_von = int(tabelle['Daten-Start'])
         jb_bis = CURRENT_YEAR -1 if tabelle['Daten-Ende'] == 'nan' else int(tabelle['Daten-Ende'])
         text = f"""Die Tabelle __{str(tabelle['Titel'])}__ wird in __{len(df)}__ verschiedenen Jahrbüchern geführt. 
-        Im Jahrbuch aus dem Jahr __{df['Jahrbuecher'][0]}__ findet man die ältesten Daten, welche aus dem Jahr __{jb_von}__ stammen. 
+        Im Jahrbuch aus dem Jahr __{df['Jahrbuecher'].iloc[0]}__ findet man die ältesten Daten, welche aus dem Jahr __{jb_von}__ stammen. 
         Die jüngsten Daten findet man im Jahrbuch __{df.iat[-1,-1]}__ und sie stammen aus dem Jahr __{jb_bis}__. 
         \n \n Klicken Sie auf den Link, um die PDF-Datei zu öffnen:"""
         st.markdown(text)
