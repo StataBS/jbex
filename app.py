@@ -15,7 +15,7 @@ import tools
 __author__ = 'Lukas Calmbach'
 __version__ = '0.0.9'
 version_date = '2021-10-28'
-my_name = 'Jahrbuch Explorer'
+my_name = 'Statistisches Jahrbuch Basel-Stadt: Sämtliche Ausgaben durchsuchen'
 my_name_short = 'JBEx'
 
 

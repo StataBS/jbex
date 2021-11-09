@@ -47,17 +47,18 @@ def right(text, amount):
 
 def left(text, amount):
     return text[:amount]
-    
+
+
 def show_table(df:pd.DataFrame, update_mode, height: int, col_cfg:list=[]):
     #Infer basic colDefs from dataframe types
     gb = GridOptionsBuilder.from_dataframe(df[["Titel","Themenbereich","Thema"]])
-    gb.configure_default_column(groupable=False, value=True, enableRowGroup=False, editable=True)
+    gb.configure_default_column(groupable=False, value=True, enableRowGroup=False, editable=False,sorteable=False,filterable=False)
 
     if col_cfg != None:
         for col in col_cfg:
             gb.configure_column(col['name'], width=col['width'], visible=col['visible'])
     
-    gb.configure_selection('single', use_checkbox=False, rowMultiSelectWithClick=False, suppressRowDeselection=False)
+    gb.configure_selection('single', use_checkbox=False, rowMultiSelectWithClick=False, suppressRowDeselection=True)
     gb.configure_pagination(paginationAutoPageSize=True)
     gb.configure_grid_options(domLayout='normal')
     gridOptions = gb.build()
@@ -69,6 +70,7 @@ def show_table(df:pd.DataFrame, update_mode, height: int, col_cfg:list=[]):
         gridOptions=gridOptions,
         height=height, 
         width='100%',
+        theme='fresh',
         #data_return_mode= DataReturnMode.FILTERED_AND_SORTED, 
         update_mode = update_mode,
         fit_columns_on_grid_load=True,
@@ -81,7 +83,23 @@ def show_table(df:pd.DataFrame, update_mode, height: int, col_cfg:list=[]):
 
 def list_suchwoerter(textinput:str):
     wordlist = re.split(r'[\b\W\b]+',textinput)
+    wordlist = remove_smallwords(wordlist)
+    for word in wordlist:
+        if word=="oder":
+            wordlist.pop(wordlist.index(word))
+        else:
+            continue
     return wordlist
+
+def remove_smallwords(wordlist):
+    for word in wordlist: 
+        if len(word)<=3:
+            wordlist.pop(wordlist.index(word))
+        else:
+            continue
+    return wordlist
+
+
 
 
 

@@ -46,30 +46,31 @@ class App():
                 self.metadata_filtered = self.metadata_filtered[self.metadata_filtered['Themenbereich'].isin(filter['themenbereich'])]
             else:
                 self.metadata_filtered = self.metadata_filtered[self.metadata_filtered['Thema'].isin(filter['thema'])]
-        
+
+
+
 
     def get_tabelle(self):
         def get_filter_description():
-            text = """Sie haben noch keinen Filter eingegegeben, die untenstehende Liste enthält alle verfügbaren Jahrbuch-Tabellen. Verwenden sie obige Felder um die Auswahl 
-            auf einen Themenbereich einzugrenzen oder suchen sie nach einem Ausdruck im Titel.
-            """
+            text =f'''<span style="color:red">__Sie haben noch keinen Filter eingegegeben, die untenstehende Liste enthält alle verfügbaren Jahrbuch-Tabellen. 
+            Verwenden sie obige Felder um die Auswahl auf einen Themenbereich einzugrenzen oder suchen sie nach Wörtern im Titel der Tabelle.__</span>'''
             if f['themenbereich'] != []:
                 liste_themenbereiche = ", ".join(f['themenbereich'])
-            if f['titel'][0] > "":
+            if f['titel']!=[]:
                 liste_titel = ", ".join(f['titel'])
-            if (f['titel'][0] > "") & (f['themenbereich'] == []):
+            if (f['titel']!=[]) & (f['themenbereich'] == []):
                 if len(f['titel']) > 1:
                     text = f"""Die untenstehende Liste enthält alle Tabellen welche die Ausdrücke **_{liste_titel}_** im Titel enthalten. """
                 else:
                     text = f"""Die untenstehende Liste enthält alle Tabellen, welche den Ausdruck **_{liste_titel}_** im Titel enthalten. """
             
-            elif (f['titel'][0] == "") & (f['themenbereich'] != []):
+            elif (f['titel']==[]) & (f['themenbereich'] != []):
                 if len(f['themenbereich']) > 1:
                  text = f"""Die untenstehende Liste enthält alle Tabellen der Themenbereiche **_{liste_themenbereiche}_**. """
                 else:
                  text = f"""Die untenstehende Liste enthält alle Tabellen des Themenbereichs **_{liste_themenbereiche}_**. """ 
               
-            elif (f['titel'][0] > "") & (f['themenbereich'] != []):
+            elif (f['titel']!=[]) & (f['themenbereich'] != []):
                 if (len(f['themenbereich']) > 1) & (len(f['titel']) > 1):
                     text = f"""Die untenstehende Liste enthält alle Tabellen der Themenbereiche **_{liste_themenbereiche}_**, welche auch die Ausdrücke **_{liste_titel}_** im Titel enthalten."""
                 elif (len(f['themenbereich']) > 1) & (len(f['titel']) == 1):
@@ -79,44 +80,65 @@ class App():
                 elif (len(f['themenbereich']) == 1) & (len(f['titel']) == 1):
                     text = f"""Die untenstehende Liste enthält alle Tabellen des Themenbereichs **_{liste_themenbereiche}_**, welche auch den Ausdruck **_{liste_titel}_** im Titel enthält."""
 
-            text += f' \n \n **Beim Selektieren eines Eintrags aus der Liste mit Tabellen werden alle Jahrbücher, welche die ausgewählte Tabelle enthalten, als interaktive Links angezeigt.**'
             return text
         
         #Generieren eines Dictionary für die Speicherung der Suchparameter
         f = {}
+        f['themenbereich']=[]
         f['thema']=[]
         f['jahrgang'] = 0
         f['titel'] = []
 
         #Eingabefenster für die Suchparameter.
-        col1,col2 = st.columns([3,1])
-        with col1:
-            #Suchparameter: Textinput
-            textinput = st.text_input("🔎 Titel der Tabelle enthält:")
+        
+        #Suchparameter: Einzelnes Jahrbuch
+        placeholder_jahrgang = st.empty()
+        with placeholder_jahrgang.container():
+            st.write("🔎 Suchen sie nach einem spezifischen Jahrbuch?")
+            jahrgang_box=st.checkbox("Nach einem spezifischen Jahrbuch suchen.", key='check1')
+        if jahrgang_box== True:
+            f['jahrgang']=st.number_input(f'Jahrbuch zwischen 1921 und {CURRENT_YEAR-1}',max_value=(CURRENT_YEAR-1), min_value=1921, help="""Im Jahr 1981 ist eine
+                Doppelausgabe aus den Jahren 1980/81 erschienen.""")    
+        st.markdown('#')
+    
+        
+        #Suchparameter: Textinput
+        placeholder_text = st.empty()
+        with placeholder_text.container():
+            st.write("🔎 Suchen sie nach Daten mit spezifischen Wörtern im Tabellentitel, dann benützen Sie folgende Suchfunktionen.")
+            textinput = st.text_input("Nach Wörter im Tabellentitel suchen:",key='text1', help='Nach einer Eingabe oder Änderung muss man mit der Eingabetaste bestätigen.')
             f['titel'] = tools.list_suchwoerter(textinput)
-            #Suchparameter: Themenbereiche
-            f['themenbereich'] = st.multiselect('🔎 Themenbereich:',  options=THEMENBEREICHE)
-            #Suchparameter: Zu jedem Themenbereich werden die Themen angezeigt.
-            ad_search=st.checkbox("Erweiterte Suchfunktion zu den Themenbereichen:")
+            
+        st.markdown('#')
+        
+        #Suchparameter: Themenbereiche und die Themen .
+        placeholder_themenbereich = st.empty()
+        with placeholder_themenbereich.container():
+            st.write("🔎 Suchen sie nach Daten zu einem Themenbereich und Thema, dann benützen Sie folgende Suchfunktionen.")
+            f['themenbereich'] = st.multiselect('Nach Themenbereich suchen:',options=THEMENBEREICHE, key='multi1')
             themen=[]
             for i in f['themenbereich']:  
                 themen.extend(THEMEN.get(i))
-            if ad_search:
-                f['thema'] = st.multiselect('🔎 Thema:',  options=themen, help="Wählen Sie immer zuerst einen Themenbereich aus." )
-        with col2:
-            #Suchparameter: Einzelnes Jahrbuch
-            st.markdown('##')
-            jahrgang_box=st.checkbox(f'Jahrbuch auswählen:', key='check2')
-            if jahrgang_box:  
-                f['jahrgang']=st.number_input(f'Jahrbuch zwischen 1921 und {CURRENT_YEAR-1}',max_value=(CURRENT_YEAR-1), min_value=1921, help="""Es gibt kein Jahrbuch für das 
-                Jahr 1980.""")
-            
-        
-        #Daten werden nach den Suchparametern gefiltert.
-        self.get_filtered_tabs(f)
+            f['thema'] = st.multiselect(label='Nach Thema suchen:' ,options=themen, help="Wählen Sie immer zuerst einen Themenbereich aus." )
+        st.markdown('#')
 
-        #Angaben zum Filter auf der Seite anzeigen lassen .
-        st.markdown(get_filter_description())
+        if f['titel']!=[]:
+            placeholder_jahrgang.empty()
+            placeholder_themenbereich.empty()
+            f['themenbereich'].clear()
+        if jahrgang_box== True:
+            placeholder_themenbereich.empty()
+            placeholder_text.empty()
+        if f['themenbereich']!=[]:
+            placeholder_jahrgang.empty()
+            placeholder_text.empty()
+        if jahrgang_box == False:
+            self.get_filtered_tabs(f)
+            if self.metadata_filtered.empty==False:
+                st.markdown(get_filter_description(),unsafe_allow_html=True)
+            else: 
+                st.markdown(f'<span style="color:red">__Es konnte kein Suchergebnis gefunden werden.__</span>',unsafe_allow_html=True)
+    
         return [self.metadata_filtered, f['jahrgang'], jahrgang_box]
         
 
@@ -125,9 +147,10 @@ class App():
         st.markdown('### Jahrbücher')
         jb_von = int(tabelle['Daten-Start'])
         jb_bis = CURRENT_YEAR -1 if tabelle['Daten-Ende'] == 'nan' else int(tabelle['Daten-Ende'])
-        text = f"""Die Tabelle **_{str(tabelle['Titel'])}_** wird in **_{len(df)}_** verschiedenen Jahrbüchern geführt. 
-        Die ältesten Daten von dieser Tabelle stammen aus dem Jahr **_{jb_von}_**; die jüngsten Daten aus dem Jahr **_{jb_bis}_**. 
-        \n \n Klicken Sie auf den Link um die PDF-Datei zu öffnen:"""
+        text = f"""Die Tabelle __{str(tabelle['Titel'])}__ wird in __{len(df)}__ verschiedenen Jahrbüchern geführt. 
+        Im Jahrbuch aus dem Jahr __{df['Jahrbuecher'][0]}__ findet man die ältesten Daten, welche aus dem Jahr __{jb_von}__ stammen. 
+        Die jüngsten Daten findet man im Jahrbuch __{df.iat[-1,-1]}__ und sie stammen aus dem Jahr __{jb_bis}__. 
+        \n \n Klicken Sie auf den Link, um die PDF-Datei zu öffnen:"""
         st.markdown(text)
         liste = ''
         for jahr in df['Jahrbuecher']:
@@ -138,8 +161,13 @@ class App():
 
     def show_jahrbuch(self,jahr):
         #Liste aus Hyperlink mit einem Jahrbuch erstellen.
-        if jahr == 1980:
-            return
+        if jahr == 1980 or jahr == 1981:
+            st.markdown('### Jahrbücher')
+            liste = ''
+            url = f"{URL_BASE}1981.pdf"
+            name = f'Statistisches Jahrbuch des Kantons Basel-Stadt 1980/81'
+            liste += f"- [{name}]({url})"
+            st.markdown(liste)
         else:
             st.markdown('### Jahrbücher')
             liste = ''
@@ -162,12 +190,16 @@ class App():
     def show_menu(self):
         metadata_filtered,jahrgang, jahrgang_box = self.get_tabelle()  
         if jahrgang_box == False:
+            st.markdown('##')
             st.subheader('Liste der Tabellen')
-            selected = tools.show_table(metadata_filtered, GridUpdateMode.SELECTION_CHANGED, 300)
+            st.markdown('**Wählen Sie aus der Liste ein Titel aus. Nach der Auswahl  werden Ihnen alle alle Jahrbücher, welche diese Tabelle enthält,  als interaktive Links angezeigt.**')
+            selected = tools.show_table(metadata_filtered, GridUpdateMode.SELECTION_CHANGED, 340)
             if len(selected) > 0:
                 df_selected = tools.make_dataframe(selected)
                 self.show_jahrbuecher(selected[0],df_selected)
+            
         else:
+            st.markdown('##')
             self.show_jahrbuch(jahrgang)
         
 
