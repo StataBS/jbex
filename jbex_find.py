@@ -83,7 +83,7 @@ class App():
                     text = f"""Die untenstehende Liste enthält alle Tabellen des Themenbereichs **_{liste_themenbereiche}_**, welche auch den Ausdruck **_{liste_titel}_** im Titel enthält."""
 
             return text
-        
+
         #Generieren eines Dictionary für die Speicherung der Suchparameter
         f = {}
         f['themenbereich']=[]
@@ -92,7 +92,6 @@ class App():
         f['titel'] = []
 
         #Eingabefenster für die Suchparameter.
-        
         #Suchparameter: Einzelnes Jahrbuch
         placeholder_jahrgang = st.empty()
         with placeholder_jahrgang.container():
@@ -107,16 +106,15 @@ class App():
         #Suchparameter: Textinput
         placeholder_text = st.empty()
         with placeholder_text.container():
-            st.write("🔎 Suchen sie nach Daten mit spezifischen Wörtern im Tabellentitel, dann benützen Sie folgende Suchfunktionen.")
-            textinput = st.text_input("Nach Wörter im Tabellentitel suchen:",key='text1', help='Nach einer Eingabe oder Änderung muss man mit der Eingabetaste bestätigen.')
-            f['titel'] = tools.list_suchwoerter(textinput)
-            
+            st.write("🔎 Suchen sie nach Daten mit spezifischen Ausdürcken im Tabellentitel, dann benützen sie folgende Suchfunktionen.")
+            textinput = st.text_input("Nach Ausdrücken im Tabellentitel suchen:",key='text1', help='Nach einer Eingabe oder Änderung muss man mit der Eingabetaste bestätigen.')
+            f['titel'] = tools.list_suchwoerter(textinput)   
         st.markdown('#')
         
         #Suchparameter: Themenbereiche und die Themen .
         placeholder_themenbereich = st.empty()
         with placeholder_themenbereich.container():
-            st.write("🔎 Suchen sie nach Daten zu einem Themenbereich und Thema, dann benützen Sie folgende Suchfunktionen.")     
+            st.write("🔎 Suchen sie nach Daten zu einem Themenbereich und Thema, dann benützen sie folgende Suchfunktionen.")     
             f['themenbereich'] = st.multiselect('Nach Themenbereich suchen:',options=THEMENBEREICHE, key='multi1')
             themen=[]
             for i in f['themenbereich']:  
@@ -135,6 +133,7 @@ class App():
             placeholder_jahrgang.empty()
             placeholder_text.empty()
         if jahrgang_box == False:
+            #Filtern der Tabellen nach Filterparameter
             self.get_filtered_tabs(f)
             if self.metadata_filtered.empty==False:
                 st.markdown(get_filter_description(),unsafe_allow_html=True)
