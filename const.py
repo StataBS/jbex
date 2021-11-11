@@ -12,7 +12,7 @@ THEMENBEREICHE = [
 'Energie',
 'Bau- und Wohnungswesen',
 'Tourismus',
-'Verkehr, Mobilität',
+'Verkehr und Mobilität',
 'Finanzmärkte und Banken',
 'Soziale Sicherheit',
 'Gesundheit',
@@ -80,7 +80,7 @@ THEMEN = {
 'Parahotellerie',
 'Gastgewerbe'],
 
-'Verkehr, Mobilität': ['Verkehrszählung',
+'Verkehr und Mobilität': ['Verkehrszählung',
 'Motorfahrzeuge',
 'Öffentlicher Verkehr',
 'Luftverkehr',

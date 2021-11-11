@@ -14,6 +14,7 @@ import re
 import tools
 
 
+
 CURRENT_YEAR = date.today().year
 class App():
     def __init__(self, metadata):

@@ -87,6 +87,9 @@ def main():
     st.markdown('##')
     text = get_app_info()
     st.markdown(text, unsafe_allow_html=True)
+    st.markdown('#')
+    if st.button(label="Clear Cache👈"):
+        st.legacy_caching.clear_cache()
 
 if __name__ == '__main__':
     main()
