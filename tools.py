@@ -52,15 +52,14 @@ def left(text, amount):
 def show_table(df:pd.DataFrame, update_mode, height: int, col_cfg:list=[]):
     #Infer basic colDefs from dataframe types
     gb = GridOptionsBuilder.from_dataframe(df[["Titel","Themenbereich","Thema"]])
-    gb.configure_default_column(groupable=False, value=True, enableRowGroup=False, editable=False,sorteable=False,filterable=False)
-
+    gb.configure_default_column(groupable=False, value=True, enableRowGroup=False, editable=False,sorteable=False,filterable=False,cellStyle={"font-size":"12px"})
     if col_cfg != None:
         for col in col_cfg:
-            gb.configure_column(col['name'], width=col['width'], visible=col['visible'])
-    
+            gb.configure_column(field=col['name'], width=col['width'], columnVisible=col["visible"],tooltipField=col['name'])
+
     gb.configure_selection('single', use_checkbox=False, rowMultiSelectWithClick=False, suppressRowDeselection=True)
     gb.configure_pagination(paginationAutoPageSize=True)
-    gb.configure_grid_options(domLayout='normal')
+    gb.configure_grid_options(domLayout='normal',enableBrowserTooltips=True, autoHeight=True)
     gridOptions = gb.build()
 
     #Display the grid
@@ -71,7 +70,7 @@ def show_table(df:pd.DataFrame, update_mode, height: int, col_cfg:list=[]):
         height=height, 
         width='100%',
         theme='fresh',
-        #data_return_mode= DataReturnMode.FILTERED_AND_SORTED, 
+        data_return_mode= DataReturnMode.FILTERED_AND_SORTED, 
         update_mode = update_mode,
         fit_columns_on_grid_load=True,
         allow_unsafe_jscode=True, #Set it to True to allow jsfunction to be injected
@@ -98,6 +97,12 @@ def remove_smallwords(wordlist):
         else:
             continue
     return wordlist
+
+def sort_themenbereich():
+    liste = const.THEMENBEREICHE.copy()
+    liste.sort()
+    return liste
+
 
 
 

@@ -13,9 +13,9 @@ import tools
 
 
 __author__ = 'Lukas Calmbach'
-__version__ = '0.0.9'
-version_date = '2021-10-28'
-my_name = 'Jahrbuch-Suche Basel-Stadt'
+__version__ = '0.1.0'
+version_date = '2021-11-15'
+my_name = 'Wilkommen in der Jahrbuch-App'
 my_name_short = 'JBEx'
 
 
@@ -50,7 +50,7 @@ def get_app_info():
     App: {my_name}<br>
     App-Version: {__version__} ({version_date})<br>
     Implementierung App: {tools.get_href('Statistisches Amt Basel-Stadt',URL_STAT_BASEL)}<br>
-    Kontakt: <a href="mailto:nathalie.grillon@bs.ch">Nathalie Grillon</a><br>
+    Kontakt: <a href="mailto:stata@bs.ch">Statistisches Amt Basel-Stadt</a><br>
     </div>
     """
     return text
@@ -69,26 +69,32 @@ def main():
     with col2:
         st.header(f"{my_name}")
     st.markdown('##')
-    with st.expander("Anleitung zur Suchfunktion"):
-        st.markdown('''Die vorliegende Anwendung hilft ihnen bei der gezielten Suche nach Jahrbuch-Inhalten. 
-        Sie haben drei Einstiegspunkte: Die Freitextsuche in den Tabellen-Titeln – wobei mehrere Suchbegriffe kombiniert werden können – 
-        ermöglicht ihnen einen raschen Überblick, ob Zahlen zu ihrem Thema vorhanden sind. 
-        Falls sie an einer speziellen Jahrbuch-Ausgabe interessiert sind, gehen sie über den Zugang «Jahrbuch auswählen». 
-        Der thematische Einstieg schliesslich erfolgt über das Feld «Themenbereich» mittels Dropdown-Liste, 
-        wobei die Suche über das Feld «Thema» zusätzlich spezifiziert/eingegrenzt werden kann. 
-        Die Ergebnisse ihrer Suche werden in Form einer Liste mit Tabellen ausgeben...
-        \n Viel Spass bei der Datenrecherche; wir hoffen, sie werden rasch fündig!''')
+    placerholder_expander = st.empty()
+    with placerholder_expander.expander(label="Hier können Sie gezielt in den statistischen Jahrbüchern suchen. 3 Einstiegspunkte stehen Ihnne zur Verfügung.", expanded=True):
+        st.markdown(f'''<p style="font-size:16px";><b>1. Freitextsuche in den Tabellen-Titel</b><br>
+        Sie können mehrer Suchbegriffe kombinieren. So erhalten Sie rasch einen Überblick, 
+        ob Zahlen zu Ihren Suchbegriffen vorhanden sind und über welchen Zeitraum.<br>  
+        <b>2. Thematische Suche</b><br>  
+        Das Feld "Themenbereich" enthält einen Auswahlliste, die nach den 19 Themen der öfftenlichen Statistik gegliedert ist. 
+        Zur weiteren Eingrenzung ist jeder Themenbereich in Themen unterteilt.<br>  
+        <b>3. Suche nach Jahrbuch-Ausgaben</b><br>  
+        Falls Sie an einer speziellen Jahrbuch-Ausgabe interessiert sind und wissen wollen, welche Tabellen und Daten in einer Ausgabe vorhanden sind.  
+        \n Die Ergebnisse Ihrer Suche werden in Form einer Liste mit Tabellen ausgegeben.</p>''', unsafe_allow_html=True)
+    st.markdown('#')
+    st.markdown(f'<p style="font-size:16px";><b>Viel Spass bei der Datenrecherche; wir hoffen, Sie werden rasch fündig!</b></p>', unsafe_allow_html=True)
     st.markdown('##')
-
     metadata = get_data()
     app = jbex_find.App(metadata)
-    app.show_menu()
-    
+    app.show_menu() 
+    st.markdown("""<style>#MainMenu {visibility: hidden;}footer {visibility: hidden;}header {visibility: hidden;}</style>""", unsafe_allow_html=True)
     st.markdown('##')
     text = get_app_info()
     st.markdown(text, unsafe_allow_html=True)
     st.markdown('#')
-    if st.button(label="Clear Cache👈"):
+    st.markdown('''<style> div.stButton>button:first-child{font-size: 9px;} </style>''', unsafe_allow_html=True)
+    button1=st.button(label="Clear Cache", key="button1")
+    
+    if button1:
         st.legacy_caching.clear_cache()
 
 if __name__ == '__main__':
