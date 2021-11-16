@@ -70,15 +70,15 @@ def main():
         st.header(f"{my_name}")
     st.markdown('##')
     placerholder_expander = st.empty()
-    with placerholder_expander.expander(label="Hier können Sie gezielt in den statistischen Jahrbüchern suchen. 3 Einstiegspunkte stehen Ihnne zur Verfügung.", expanded=True):
+    with placerholder_expander.expander(label="Hier können Sie gezielt in den statistischen Jahrbüchern suchen. 3 Einstiegspunkte stehen Ihne zur Verfügung.", expanded=True):
         st.markdown(f'''<p style="font-size:16px";><b>1. Freitextsuche in den Tabellen-Titeln</b><br>
-        Sie können mehrer Suchbegriffe kombinieren. So erhalten Sie rasch einen Überblick, 
+        Sie können mehrere Suchbegriffe kombinieren. So erhalten Sie rasch einen Überblick, 
         ob Zahlen zu Ihren Suchbegriffen vorhanden sind und über welchen Zeitraum.<br>  
         <b>2. Thematische Suche</b><br>  
-        Das Feld "Themenbereich" enthält einen Auswahlliste, die nach den 19 Themen der öfftenlichen Statistik gegliedert ist. 
+        Das Feld "Themenbereich" enthält eine Auswahlliste, die nach den 19 Themen der öffentlichen Statistik gegliedert ist. 
         Zur weiteren Eingrenzung ist jeder Themenbereich in Themen unterteilt.<br>  
         <b>3. Suche nach Jahrbuch-Ausgaben</b><br>  
-        Falls Sie an einer speziellen Jahrbuch-Ausgabe interessiert sind und wissen wollen, welche Tabellen und Daten in einer Ausgabe vorhanden sind.  
+        Falls Sie an einer speziellen Jahrbuch-Ausgabe interessiert sind.  
         \n Die Ergebnisse Ihrer Suche werden in Form einer Liste mit Tabellen ausgegeben.</p>''', unsafe_allow_html=True)
     st.markdown('#')
     st.markdown(f'<p style="font-size:16px";><b>Viel Spass bei der Datenrecherche; wir hoffen, Sie werden rasch fündig!</b></p>', unsafe_allow_html=True)

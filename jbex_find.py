@@ -95,7 +95,7 @@ class App():
         #Suchparameter: Textinput
         placeholder_text = st.empty()
         with placeholder_text.container():
-            st.write("🔎 Spezifischen Wörter im Tabellentitel suchen:")
+            st.write("🔎 spezifischen Wörter im Tabellentitel suchen:")
             textinput = st.text_input("Nach Wörter im Tabellentitel suchen:",key='text1', help='Nach einer Eingabe muss man mit der Eingabetaste bestätigen.')
             f['titel'] = tools.list_suchwoerter(textinput)   
         st.markdown('#')
@@ -152,7 +152,7 @@ class App():
         jb_bis = CURRENT_YEAR -1 if tabelle['Daten-Ende'] == 'nan' else int(tabelle['Daten-Ende'])
         text = f"""Die Tabelle __{str(tabelle['Titel'])}__ wird in __{len(df)}__ verschiedenen Jahrbüchern geführt. 
         Im Jahrbuch aus dem Jahr __{df['Jahrbuecher'].iloc[0]}__ findet man die ältesten Daten, welche aus dem Jahr __{jb_von}__ stammen. 
-        Die jüngsten Daten findet man im Jahrbuch __{df.iat[-1,-1]}__ und sie stammen aus dem Jahr __{jb_bis}__. 
+        Die jüngsten Daten findet man im Jahrbuch __{df.iat[-1,-1]}__; sie stammen aus dem Jahr __{jb_bis}__. 
         \n \n Klicken Sie auf den Link, um die PDF-Datei zu öffnen:"""
         st.markdown(text)
         liste = ''
