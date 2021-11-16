@@ -107,13 +107,13 @@ class App():
             st.write("🔎 Themenbereich auswählen:")
             col1, col2=st.columns(2)
             with col1:     
-                f['themenbereich'] = st.multiselect(label='Themenbereich auswählen:',options=tools.sort_themenbereich(), key='multi1')
+                f['themenbereich'] = st.multiselect(label='Themenbereich:',options=tools.sort_themenbereich(), key='multi1')
             with col2:
                 themen=[]
                 for i in f['themenbereich']:  
                     themen.extend(THEMEN.get(i))
                     themen.sort()
-                f['thema'] = st.multiselect(label='Thema auswählen (optional):' ,options=themen, help="Wählen Sie immer zuerst einen Themenbereich aus." )
+                f['thema'] = st.multiselect(label='Thema (optional):' ,options=themen, help="Wählen Sie immer zuerst einen Themenbereich aus." )
         st.markdown('#')
 
         #Suchparameter: Einzelnes Jahrbuch
@@ -197,18 +197,17 @@ class App():
     def show_menu(self):
         metadata_filtered,jahrgang, jahrgang_box = self.get_tabelle() 
         col_cfg = []
-        col_cfg = [{"name":"Titel","width":60,"visible":True},
-                    {"name":"Themenbereich","width":20,"visible":True},
-                    {"name":"Thema","width":20,"visible":True}]
+        col_cfg = [{"name":"Titel","width":400,"visible":True},
+                    {"name":"Themenbereich","width":100,"visible":True},
+                    {"name":"Thema","width":100,"visible":True}]
         if jahrgang_box == False:
             st.markdown('##')
             st.subheader('Liste der Tabellen')
             st.markdown('**Markieren Sie einen Tabellentitel um zu sehen, in welchen Jahrbüchern Daten vorhanden sind. Die Jahrbücher werden als interaktive Links angezeigt.**')
-            selected = tools.show_table(metadata_filtered, GridUpdateMode.SELECTION_CHANGED, 340, col_cfg=col_cfg)
+            selected = tools.show_table(metadata_filtered, GridUpdateMode.SELECTION_CHANGED, 310, col_cfg=col_cfg)
             if len(selected) > 0:  
                 df_selected = tools.make_dataframe(selected)
-                self.show_jahrbuecher(selected[0],df_selected)
-            
+                self.show_jahrbuecher(selected[0],df_selected)    
         else:
             st.markdown('##')
             self.show_jahrbuch(jahrgang)
@@ -216,7 +215,10 @@ class App():
             #metadata_filtered_jahr = metadata_filtered[metadata_filtered[f"JB-{jahrgang}"].str.contains("x")==False]
             st.subheader('Tabellenverzeichnis')
             st.markdown('**Markieren Sie einen Tabellentitel um zu sehen, in welchen Jahrbüchern diese Tabelle enthalten ist.**')
-            selected = tools.show_table(metadata_filtered[metadata_filtered[f"JB-{jahrgang}"].str.contains("x")==False], GridUpdateMode.SELECTION_CHANGED, 340, col_cfg=col_cfg)
+            if jahrgang != 1980 | jahrgang !=1981:
+                selected = tools.show_table(metadata_filtered[metadata_filtered[f"JB-{jahrgang}"].str.contains("x")==False], GridUpdateMode.SELECTION_CHANGED, 340, col_cfg=col_cfg)
+            else: 
+                selected = tools.show_table(metadata_filtered[metadata_filtered[f"JB-1980/81"].str.contains("x")==False], GridUpdateMode.SELECTION_CHANGED, 340, col_cfg=col_cfg)
             if len(selected) > 0: 
                 df_selected = tools.make_dataframe(selected)
                 self.show_jahrbuecher(selected[0],df_selected)

@@ -3,6 +3,7 @@ from st_aggrid import GridOptionsBuilder, AgGrid, GridUpdateMode, DataReturnMode
 import re
 import const
 
+
 def get_table(tbl_dic: dict) -> str:
     result = '<table>'
     for key, value in tbl_dic.items():
@@ -52,14 +53,14 @@ def left(text, amount):
 def show_table(df:pd.DataFrame, update_mode, height: int, col_cfg:list=[]):
     #Infer basic colDefs from dataframe types
     gb = GridOptionsBuilder.from_dataframe(df[["Titel","Themenbereich","Thema"]])
-    gb.configure_default_column(groupable=False, value=True, enableRowGroup=False, editable=False,sorteable=False,filterable=False,cellStyle={"font-size":"12px"})
+    gb.configure_default_column(groupable=False, enableRowGroup=False, editable=False,sorteable=False,filterable=False,cellStyle={'font-size': '12px'})
     if col_cfg != None:
         for col in col_cfg:
             gb.configure_column(field=col['name'], width=col['width'], columnVisible=col["visible"],tooltipField=col['name'])
 
     gb.configure_selection('single', use_checkbox=False, rowMultiSelectWithClick=False, suppressRowDeselection=True)
     gb.configure_pagination(paginationAutoPageSize=True)
-    gb.configure_grid_options(domLayout='normal',enableBrowserTooltips=True, autoHeight=True)
+    gb.configure_grid_options(domLayout='normal',enableBrowserTooltips=True)
     gridOptions = gb.build()
 
     #Display the grid

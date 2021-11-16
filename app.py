@@ -71,7 +71,7 @@ def main():
     st.markdown('##')
     placerholder_expander = st.empty()
     with placerholder_expander.expander(label="Hier können Sie gezielt in den statistischen Jahrbüchern suchen. 3 Einstiegspunkte stehen Ihnne zur Verfügung.", expanded=True):
-        st.markdown(f'''<p style="font-size:16px";><b>1. Freitextsuche in den Tabellen-Titel</b><br>
+        st.markdown(f'''<p style="font-size:16px";><b>1. Freitextsuche in den Tabellen-Titeln</b><br>
         Sie können mehrer Suchbegriffe kombinieren. So erhalten Sie rasch einen Überblick, 
         ob Zahlen zu Ihren Suchbegriffen vorhanden sind und über welchen Zeitraum.<br>  
         <b>2. Thematische Suche</b><br>  
