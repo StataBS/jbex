@@ -2,7 +2,6 @@ import pandas as pd
 from st_aggrid import GridOptionsBuilder, AgGrid, GridUpdateMode, DataReturnMode, JsCode
 import re
 import const
-from st_aggrid.shared import JsCode
 
 
 def get_table(tbl_dic: dict) -> str:
