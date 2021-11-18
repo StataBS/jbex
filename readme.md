@@ -3,8 +3,8 @@
 ## Installation
 Auf remoteserver cmd-Shell eröffnen als Admin:
 ```
-> git clone ssh://git@evpdstata01:/docex.git
-> cd docex
+> git clone ssh://git@evpdstata01:/jbex.git
+> cd jbex
 > python 3.8 -m venv env
 > LC: py -3.8 -m venv env
 > env\scripts\activate

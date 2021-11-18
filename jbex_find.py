@@ -12,6 +12,7 @@ from st_aggrid import GridUpdateMode
 from const import *
 import re
 import tools
+import app
 
 
 
@@ -53,19 +54,22 @@ class App():
     def get_tabelle(self):
         def get_filter_description():
             text =f'''<p style="color:red"><b>Sie haben noch keinen Filter eingegegeben. Die untenstehende Liste enthält alle verfügbaren Jahrbuch-Tabellen. 
-            Verwenden Sie obige Felder um die Auswahl auf einen Themenbereich einzugrenzen oder suchen Sie nach Wörtern im Tabellentitel.</b></p>'''
+            Verwenden Sie obige Felder, um die Auswahl auf einen Themenbereich einzugrenzen, oder suchen Sie nach Wörtern im Tabellentitel.</b></p>'''
             if f['themenbereich'] != []:
                 liste_themenbereiche = ", ".join(f['themenbereich'])
-            if f['titel']!=[]:
+            if len(f['titel'])!= []:
                 for i, wort in enumerate(f['titel']):
                     f['titel'][i]=wort.capitalize()
-                liste_titel = ", ".join(f['titel'])
-            if (f['titel']!=[]) & (f['themenbereich'] == []):
-                if len(f['titel']) > 1:
-                    text = f"""Die untenstehende Liste enthält alle Tabellen welche die Wörter __{liste_titel}__ im Titel enthalten. """
-                else:
-                    text = f"""Die untenstehende Liste enthält alle Tabellen, welche das Wort __{liste_titel}__ im Titel enthalten. """
+                    liste_titel = ", ".join(f['titel'])
             
+            if (f['titel']!=[]) & (f['themenbereich'] == []):
+                if len(f['titel']) == 1:
+                    text = f"""Die untenstehende Liste enthält alle Tabellen, welche das Wort __{f['titel'][0]}__ im Titel enthalten. """
+                elif len(f['titel']) == 2:
+                    text = f"""Die untenstehende Liste enthält alle Tabellen welche die Wörter __{f['titel'][0]}__ und __{f['titel'][1]}__ im Titel enthalten. """
+                else:
+                    text = f"""Die untenstehende Liste enthält alle Tabellen welche die Wörter __{liste_titel}__ im Titel enthalten. """
+                    
             elif (f['titel']==[]) & (f['themenbereich'] != []):
                 if len(f['themenbereich']) > 1:
                  text = f"""Die untenstehende Liste enthält alle Tabellen der Themenbereiche __{liste_themenbereiche}__. """
@@ -84,6 +88,7 @@ class App():
 
             return text
 
+
         #Generieren eines Dictionary für die Speicherung der Suchparameter
         f = {}
         f['themenbereich']=[]
@@ -95,18 +100,17 @@ class App():
         #Suchparameter: Textinput
         placeholder_text = st.empty()
         with placeholder_text.container():
-            st.write("🔎 spezifischen Wörter im Tabellentitel suchen:")
-            textinput = st.text_input("Nach Wörter im Tabellentitel suchen:",key='text1', help='Nach einer Eingabe muss man mit der Eingabetaste bestätigen.')
+            st.write("🔎 Wörter im Tabellentitel suchen:")
+            textinput = st.text_input("Wörter im Tabellentitel suchen:",key='text1', help='Nach einer Eingabe muss man mit der Eingabetaste bestätigen.')
             f['titel'] = tools.list_suchwoerter(textinput)   
         st.markdown('#')
         
-    
         #Suchparameter: Themenbereiche und die Themen .
         placeholder_themenbereich = st.empty()
         with placeholder_themenbereich.container():
             st.write("🔎 Themenbereich auswählen:")
             col1, col2=st.columns(2)
-            with col1:     
+            with col1: 
                 f['themenbereich'] = st.multiselect(label='Themenbereich:',options=tools.sort_themenbereich(), key='multi1')
             with col2:
                 themen=[]
@@ -146,7 +150,7 @@ class App():
         
 
     def show_jahrbuecher(self, tabelle, df):
-        #Liste aus Hyperlink mit allen Jahrbücher erstellen, sowie Informationen zu Daten und Themenbereich ausgeben.
+        #Liste aus Hyperlinks mit allen Jahrbücher erstellen, sowie Informationen zu Daten und Themenbereich ausgeben.
         st.markdown('### Jahrbücher')
         jb_von = int(tabelle['Daten-Start'])
         jb_bis = CURRENT_YEAR -1 if tabelle['Daten-Ende'] == 'nan' else int(tabelle['Daten-Ende'])
@@ -156,18 +160,23 @@ class App():
         \n \n Klicken Sie auf den Link, um die PDF-Datei zu öffnen:"""
         st.markdown(text)
         liste = ''
-        for jahr in df['Jahrbuecher']:
-            url = f"{URL_BASE}{jahr}.pdf"
-            name = f'Statistisches Jahrbuch des Kantons Basel-Stadt {jahr}'
-            liste += f"- [{name}]({url}) \n"
+        for jahr in df['Jahrbuecher']:  
+            if jahr != 1981:
+                url = f"{URL_BASE}{jahr}.pdf"
+                name = f'Statistisches Jahrbuch des Kantons Basel-Stadt {jahr}'
+                liste += f"- [{name}]({url}) \n"
+            elif jahr == 1981:
+                url = f"{URL_BASE}{jahr}.pdf"
+                name = f'Statistisches Jahrbuch des Kantons Basel-Stadt 1980/81'
+                liste += f"- [{name}]({url}) \n"
         st.markdown(liste)
 
 
     def show_jahrbuch(self,jahr):
-        #Liste aus Hyperlink mit einem Jahrbuch erstellen.
+        #Hyperlink mit einem Jahrbuch erstellen.
         if jahr == 1980 or jahr == 1981:
             st.markdown('### Jahrbücher')
-            st.markdown(f"Sie können die Gesamtausgabe des __Jahrbuchs__ __{jahr}__ als PDF-Datei herunterladen.")
+            st.markdown(f"Sie können die Gesamtausgabe des __Jahrbuchs__ __1980/81__ als PDF-Datei herunterladen.")
             liste = ''
             url = f"{URL_BASE}1981.pdf"
             name = f'Statistisches Jahrbuch des Kantons Basel-Stadt 1980/81'
@@ -189,39 +198,36 @@ class App():
         st.markdown(text1)
         liste = ''
         for i in range(len(df)):
-            name = f"**{df['Jahrbuecher'].iloc[i]}:**\t_{df['Values'].iloc[i]}_"
+            name = f"**{df['Jahrbuecher'].iloc[i]}:**\t_{df['Datenjahre'].iloc[i]}_"
             liste += f"- {name} \n"   
         st.markdown(liste)
         
     
     def show_menu(self):
-        metadata_filtered,jahrgang, jahrgang_box = self.get_tabelle() 
-        col_cfg = []
-        col_cfg = [{"name":"Titel","width":400,"visible":True},
-                    {"name":"Themenbereich","width":100,"visible":True},
-                    {"name":"Thema","width":100,"visible":True}]
+        df_metadata_filtered,jahrgang, jahrgang_box = self.get_tabelle() 
+
         if jahrgang_box == False:
             st.markdown('##')
             st.subheader('Liste der Tabellen')
-            st.markdown('**Markieren Sie einen Tabellentitel um zu sehen, in welchen Jahrbüchern Daten vorhanden sind. Die Jahrbücher werden als interaktive Links angezeigt.**')
-            selected = tools.show_table(metadata_filtered, GridUpdateMode.SELECTION_CHANGED, 310, col_cfg=col_cfg)
+            st.markdown('**Markieren Sie einen Tabellentitel, um zu sehen, in welchen Jahrbüchern Daten vorhanden sind. Die Jahrbücher werden als interaktive Links angezeigt.**')
+            selected = tools.show_table(df_metadata_filtered, GridUpdateMode.SELECTION_CHANGED, 310, col_cfg=COL_CFG)
             if len(selected) > 0:  
-                df_selected = tools.make_dataframe(selected)
-                self.show_jahrbuecher(selected[0],df_selected)    
+                df_datenjahre_jahre = tools.make_dataframe(selected)
+                self.show_jahrbuecher(selected[0],df_datenjahre_jahre)    
         else:
             st.markdown('##')
             self.show_jahrbuch(jahrgang)
             st.markdown('##')
-            #metadata_filtered_jahr = metadata_filtered[metadata_filtered[f"JB-{jahrgang}"].str.contains("x")==False]
             st.subheader('Tabellenverzeichnis')
-            st.markdown('**Markieren Sie einen Tabellentitel um zu sehen, in welchen Jahrbüchern diese Tabelle enthalten ist.**')
+            st.markdown('**Markieren Sie einen Tabellentitel, um zu sehen, in welchen Jahrbüchern diese Tabelle enthalten ist.**')          
             if jahrgang != 1980 | jahrgang !=1981:
-                selected = tools.show_table(metadata_filtered[metadata_filtered[f"JB-{jahrgang}"].str.contains("x")==False], GridUpdateMode.SELECTION_CHANGED, 340, col_cfg=col_cfg)
+                selected = tools.show_table(df_metadata_filtered[df_metadata_filtered[f"JB-{jahrgang}"].str.contains("x")==False], GridUpdateMode.SELECTION_CHANGED, 340, col_cfg=col_cfg)
             else: 
-                selected = tools.show_table(metadata_filtered[metadata_filtered[f"JB-1980/81"].str.contains("x")==False], GridUpdateMode.SELECTION_CHANGED, 340, col_cfg=col_cfg)
+                selected = tools.show_table(df_metadata_filtered[df_metadata_filtered[f"JB-1980/81"].str.contains("x")==False], GridUpdateMode.SELECTION_CHANGED, 340, col_cfg=col_cfg)
+            
             if len(selected) > 0: 
-                df_selected = tools.make_dataframe(selected)
-                self.show_jahrbuecher(selected[0],df_selected)
+               df_datenjahre_jahre = tools.make_dataframe(selected)
+               self.show_jahrbuecher(selected[0],df_datenjahre_jahre)
            
            
       

@@ -2,6 +2,7 @@ import pandas as pd
 from st_aggrid import GridOptionsBuilder, AgGrid, GridUpdateMode, DataReturnMode, JsCode
 import re
 import const
+from st_aggrid.shared import JsCode
 
 
 def get_table(tbl_dic: dict) -> str:
@@ -23,10 +24,16 @@ def get_list_index(lst: list, value):
 
 def make_dataframe(selected: list ):
     listval = []
+    listkeys = []
     listval = list(selected[0].values())[6:]
-    df = pd.DataFrame(data=[listval,const.JAHRBUECHER]).transpose()
-    df.columns=['Values', 'Jahrbuecher']
-    df_selected= df[df['Values'].str.contains("x")==False]
+    listkeys = [re.sub("\D","",x) for x in list(selected[0].keys())[6:]]
+    for i, val in enumerate(listkeys):
+                    listkeys[i] = int(val)
+                    if val == "198081":
+                        listkeys[i] = 1981
+    df = pd.DataFrame(data=[listval,listkeys]).transpose()
+    df.columns=['Datenjahre', 'Jahrbuecher']
+    df_selected= df[df['Datenjahre'].str.contains("x")==False]
     return df_selected
 
 
@@ -53,10 +60,13 @@ def left(text, amount):
 def show_table(df:pd.DataFrame, update_mode, height: int, col_cfg:list=[]):
     #Infer basic colDefs from dataframe types
     gb = GridOptionsBuilder.from_dataframe(df[["Titel","Themenbereich","Thema"]])
-    gb.configure_default_column(groupable=False, enableRowGroup=False, editable=False,sorteable=False,filterable=False,cellStyle={'font-size': '12px'})
+
+    gb.configure_default_column(groupable=False, value=True, enableRowGroup=False, editable=False,sorteable=False,filterable=False,resizable=True,cellStyle={'font-size': '12px'})
+    
     if col_cfg != None:
         for col in col_cfg:
-            gb.configure_column(field=col['name'], width=col['width'], columnVisible=col["visible"],tooltipField=col['name'])
+            gb.configure_column(field=col['name'],width=col['width'], tooltipField=col['name'],suppressSizeToFit=col['suppressSizeToFit'])
+
 
     gb.configure_selection('single', use_checkbox=False, rowMultiSelectWithClick=False, suppressRowDeselection=True)
     gb.configure_pagination(paginationAutoPageSize=True)
@@ -64,12 +74,11 @@ def show_table(df:pd.DataFrame, update_mode, height: int, col_cfg:list=[]):
     gridOptions = gb.build()
 
     #Display the grid
-    
     grid_response = AgGrid(
         df, 
         gridOptions=gridOptions,
-        height=height, 
-        width='100%',
+        height=height,
+        width= '100%', 
         theme='fresh',
         data_return_mode= DataReturnMode.FILTERED_AND_SORTED, 
         update_mode = update_mode,
@@ -81,6 +90,7 @@ def show_table(df:pd.DataFrame, update_mode, height: int, col_cfg:list=[]):
     selected = grid_response['selected_rows']
     return selected
 
+
 def list_suchwoerter(textinput:str):
     wordlist = re.split(r'[\b\W\b]+',textinput)
     wordlist = remove_smallwords(wordlist)
@@ -91,6 +101,7 @@ def list_suchwoerter(textinput:str):
             continue
     return wordlist
 
+
 def remove_smallwords(wordlist):
     for word in wordlist: 
         if len(word)<=3:
@@ -98,6 +109,7 @@ def remove_smallwords(wordlist):
         else:
             continue
     return wordlist
+
 
 def sort_themenbereich():
     liste = const.THEMENBEREICHE.copy()

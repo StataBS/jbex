@@ -136,3 +136,7 @@ THEMEN = {
 }
 
 JAHRBUECHER = list(range(1921,1980,1))+ list(range(1981,(date.today().year),1))
+
+COL_CFG = [{"name":"Titel","width":400,"suppressSizeToFit":False},
+                    {"name":"Themenbereich","width":120,"suppressSizeToFit":False},
+                    {"name":"Thema","width":120,"suppressSizeToFit":False}]

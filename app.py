@@ -22,12 +22,14 @@ my_name_short = 'JBEx'
 def load_lottiefile(filepath: str):
     with open(filepath, "r") as f:
         return json.load(f)
-        
+
+       
 def load_lottieurl(url: str):
     r = requests.get(url)
     if r.status_code != 200:
         return None
     return r.json()
+
 
 def get_app_info():
     """
@@ -55,22 +57,52 @@ def get_app_info():
     """
     return text
 
-@st.cache 
-def get_data():
-    metadata = pd.read_csv(TABELLEN_FILE, sep='\t')
-    return metadata
 
-def main():
+def remove_menu():
+    text = """<style>#MainMenu {visibility: hidden;}footer {visibility: hidden;}header {visibility: hidden;}</style>"""
+    return text
+
+
+def clear_button():
+    st.markdown('''<style> div.stButton>button:first-child{font-size: 9px;} </style>''', unsafe_allow_html=True)
+    button1=st.button(label="Clear Cache", key="button1")
+    if button1:
+        st.legacy_caching.clear_cache()
+
+
+def show_titel():
     lottie_json = load_lottiefile('./images/11793-books-stack.json')
-    st.set_page_config(page_title=my_name_short, page_icon='./images/favicon.png', layout='wide', initial_sidebar_state='auto') 
     col1,col2=st.columns([0.4,3])
     with col1:
         st_lottie(lottie_json, height=75, width=100,key="lottie1")
     with col2:
         st.header(f"{my_name}")
-    st.markdown('##')
+
+
+def initial_widget_states():
+    for key in ["multi1","text1","check1"]:
+        if key not in st.session_state:
+            st.session_state["multi1"]=[]
+            st.session_state["text1"]=""
+            st.session_state["check1"]=False
+
+
+def print_anleitung():
+    if st.session_state.get("check1")==False:
+        if st.session_state.get("multi1")==[]:
+            if st.session_state.get("text1")=="":
+                show_anleitung(True)
+            else:
+                show_anleitung(False)
+        else:   
+            show_anleitung(False)
+    else:   
+        show_anleitung(False)
+
+
+def show_anleitung(exp_value: bool):
     placerholder_expander = st.empty()
-    with placerholder_expander.expander(label="Hier können Sie gezielt in den statistischen Jahrbüchern suchen. 3 Einstiegspunkte stehen Ihnen zur Verfügung.", expanded=True):
+    with placerholder_expander.expander(label="Hier können Sie gezielt in den statistischen Jahrbüchern suchen. 3 Einstiegspunkte stehen Ihnen zur Verfügung.", expanded=exp_value):
         st.markdown(f'''<p style="font-size:16px";><b>1. Freitextsuche in den Tabellen-Titeln</b><br>
         Sie können mehrere Suchbegriffe kombinieren. So erhalten Sie rasch einen Überblick, 
         ob Zahlen zu Ihren Suchbegriffen vorhanden sind und über welchen Zeitraum.<br>  
@@ -80,22 +112,32 @@ def main():
         <b>3. Suche nach Jahrbuch-Ausgaben</b><br>  
         Falls Sie an einer speziellen Jahrbuch-Ausgabe interessiert sind.  
         \n Die Ergebnisse Ihrer Suche werden in Form einer Liste mit Tabellen ausgegeben.</p>''', unsafe_allow_html=True)
+
+
+@st.cache 
+def get_data():
+    metadata = pd.read_csv(TABELLEN_FILE, sep='\t')
+    return metadata
+
+def main():
+    st.set_page_config(page_title=my_name_short, page_icon='./images/favicon.png', layout='wide', initial_sidebar_state='auto') 
+    st.markdown(remove_menu(), unsafe_allow_html=True)
+    show_titel()
+    st.markdown('##')
+    initial_widget_states()
+    print_anleitung()
     st.markdown('#')
     st.markdown(f'<p style="font-size:16px";><b>Viel Spass bei der Datenrecherche; wir hoffen, Sie werden rasch fündig!</b></p>', unsafe_allow_html=True)
     st.markdown('##')
     metadata = get_data()
     app = jbex_find.App(metadata)
-    app.show_menu() 
-    st.markdown("""<style>#MainMenu {visibility: hidden;}footer {visibility: hidden;}header {visibility: hidden;}</style>""", unsafe_allow_html=True)
-    st.markdown('##')
-    text = get_app_info()
-    st.markdown(text, unsafe_allow_html=True)
-    st.markdown('#')
-    st.markdown('''<style> div.stButton>button:first-child{font-size: 9px;} </style>''', unsafe_allow_html=True)
-    button1=st.button(label="Clear Cache", key="button1")
+    app.show_menu()
     
-    if button1:
-        st.legacy_caching.clear_cache()
+    st.markdown('##')
+    st.markdown(get_app_info(), unsafe_allow_html=True)
+    st.markdown('#')
+    clear_button()
+
 
 if __name__ == '__main__':
     main()
