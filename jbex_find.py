@@ -221,9 +221,9 @@ class App():
             st.subheader('Tabellenverzeichnis')
             st.markdown('**Markieren Sie einen Tabellentitel, um zu sehen, in welchen Jahrbüchern diese Tabelle enthalten ist.**')          
             if jahrgang != 1980 | jahrgang !=1981:
-                selected = tools.show_table(df_metadata_filtered[df_metadata_filtered[f"JB-{jahrgang}"].str.contains("x")==False], GridUpdateMode.SELECTION_CHANGED, 340, col_cfg=col_cfg)
+                selected = tools.show_table(df_metadata_filtered[df_metadata_filtered[f"JB-{jahrgang}"].str.contains("x")==False], GridUpdateMode.SELECTION_CHANGED, 340, col_cfg=COL_CFG)
             else: 
-                selected = tools.show_table(df_metadata_filtered[df_metadata_filtered[f"JB-1980/81"].str.contains("x")==False], GridUpdateMode.SELECTION_CHANGED, 340, col_cfg=col_cfg)
+                selected = tools.show_table(df_metadata_filtered[df_metadata_filtered[f"JB-1980/81"].str.contains("x")==False], GridUpdateMode.SELECTION_CHANGED, 340, col_cfg=COL_CFG)
             
             if len(selected) > 0: 
                df_datenjahre_jahre = tools.make_dataframe(selected)
