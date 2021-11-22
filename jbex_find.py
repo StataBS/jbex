@@ -103,7 +103,7 @@ class App():
             st.write("🔎 Wörter im Tabellentitel suchen:")
             textinput = st.text_input("Wörter im Tabellentitel suchen:",key='text1', help='Nach einer Eingabe muss man mit der Eingabetaste bestätigen.')
             f['titel'] = tools.list_suchwoerter(textinput)   
-        st.markdown('#')
+        st.markdown('<br>', unsafe_allow_html=True)
         
         #Suchparameter: Themenbereiche und die Themen .
         placeholder_themenbereich = st.empty()
@@ -118,7 +118,7 @@ class App():
                     themen.extend(THEMEN.get(i))
                     themen.sort()
                 f['thema'] = st.multiselect(label='Thema (optional):' ,options=themen, help="Wählen Sie immer zuerst einen Themenbereich aus." )
-        st.markdown('#')
+        st.markdown('<br>', unsafe_allow_html=True)
 
         #Suchparameter: Einzelnes Jahrbuch
         placeholder_jahrgang = st.empty()
@@ -127,7 +127,7 @@ class App():
         if jahrgang_box== True:
             f['jahrgang']=st.number_input(f'Jahrbuch zwischen 1921 und {CURRENT_YEAR-1}',max_value=(CURRENT_YEAR-1), min_value=1921, help="""Im Jahr 1981 ist eine
                 Doppelausgabe aus den Jahren 1980/81 erschienen.""")    
-        st.markdown('#')
+        st.markdown('<br>', unsafe_allow_html=True)
 
         if f['titel']!=[]:
             placeholder_jahrgang.empty()
@@ -151,7 +151,7 @@ class App():
 
     def show_jahrbuecher(self, tabelle, df):
         #Liste aus Hyperlinks mit allen Jahrbücher erstellen, sowie Informationen zu Daten und Themenbereich ausgeben.
-        st.markdown('### Jahrbücher')
+        st.subheader('__Jahrbücher__')
         jb_von = int(tabelle['Daten-Start'])
         jb_bis = CURRENT_YEAR -1 if tabelle['Daten-Ende'] == 'nan' else int(tabelle['Daten-Ende'])
         text = f"""Die Tabelle __{str(tabelle['Titel'])}__ wird in __{len(df)}__ verschiedenen Jahrbüchern geführt. 
@@ -175,7 +175,7 @@ class App():
     def show_jahrbuch(self,jahr):
         #Hyperlink mit einem Jahrbuch erstellen.
         if jahr == 1980 or jahr == 1981:
-            st.markdown('### Jahrbücher')
+            st.subheader('__Jahrbuch__')
             st.markdown(f"Sie können die Gesamtausgabe des __Jahrbuchs__ __1980/81__ als PDF-Datei herunterladen.")
             liste = ''
             url = f"{URL_BASE}1981.pdf"
@@ -183,7 +183,7 @@ class App():
             liste += f"- [{name}]({url})"
             st.markdown(liste)
         else:
-            st.markdown('### Jahrbücher')
+            st.subheader('__Jahrbuch__')
             st.markdown(f"Sie können die Gesamtausgabe des __Jahrbuchs__ __{jahr}__ als PDF-Datei herunterladen.")
             liste = ''
             url = f"{URL_BASE}{jahr}.pdf"
@@ -207,19 +207,20 @@ class App():
         df_metadata_filtered,jahrgang, jahrgang_box = self.get_tabelle() 
 
         if jahrgang_box == False:
-            st.markdown('##')
-            st.subheader('Liste der Tabellen')
-            st.markdown('**Markieren Sie einen Tabellentitel, um zu sehen, in welchen Jahrbüchern Daten vorhanden sind. Die Jahrbücher werden als interaktive Links angezeigt.**')
+            st.markdown('<br><br>', unsafe_allow_html=True)
+            st.subheader('__Liste der Tabellen__')
+            st.markdown('''__Markieren Sie einen Tabellentitel, um zu sehen, 
+            in welchen Jahrbüchern Daten vorhanden sind. Die Jahrbücher werden als interaktive Links angezeigt.__''')
             selected = tools.show_table(df_metadata_filtered, GridUpdateMode.SELECTION_CHANGED, 310, col_cfg=COL_CFG)
             if len(selected) > 0:  
                 df_datenjahre_jahre = tools.make_dataframe(selected)
                 self.show_jahrbuecher(selected[0],df_datenjahre_jahre)    
         else:
-            st.markdown('##')
+            st.markdown('<br><br>', unsafe_allow_html=True)
             self.show_jahrbuch(jahrgang)
-            st.markdown('##')
-            st.subheader('Tabellenverzeichnis')
-            st.markdown('**Markieren Sie einen Tabellentitel, um zu sehen, in welchen Jahrbüchern diese Tabelle enthalten ist.**')          
+            st.markdown('<br><br>', unsafe_allow_html=True)
+            st.subheader('__Tabellenverzeichnis__')
+            st.markdown('__Markieren Sie einen Tabellentitel, um zu sehen, in welchen Jahrbüchern diese Tabelle enthalten ist.__')          
             if jahrgang != 1980 | jahrgang !=1981:
                 selected = tools.show_table(df_metadata_filtered[df_metadata_filtered[f"JB-{jahrgang}"].str.contains("x")==False], GridUpdateMode.SELECTION_CHANGED, 340, col_cfg=COL_CFG)
             else: 

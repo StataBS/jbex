@@ -15,7 +15,7 @@ import tools
 __author__ = 'Lukas Calmbach'
 __version__ = '0.1.0'
 version_date = '2021-11-15'
-my_name = 'Wilkommen in der Jahrbuch-App'
+my_name = 'Willkommen in der Jahrbuch-App'
 my_name_short = 'JBEx'
 
 
@@ -123,19 +123,19 @@ def main():
     st.set_page_config(page_title=my_name_short, page_icon='./images/favicon.png', layout='wide', initial_sidebar_state='auto') 
     st.markdown(remove_menu(), unsafe_allow_html=True)
     show_titel()
-    st.markdown('##')
+    st.markdown('<br>', unsafe_allow_html=True)
     initial_widget_states()
     print_anleitung()
-    st.markdown('#')
+    st.markdown('<br>', unsafe_allow_html=True)
     st.markdown(f'<p style="font-size:16px";><b>Viel Spass bei der Datenrecherche; wir hoffen, Sie werden rasch fündig!</b></p>', unsafe_allow_html=True)
-    st.markdown('##')
+    st.markdown('<br>', unsafe_allow_html=True)
     metadata = get_data()
     app = jbex_find.App(metadata)
     app.show_menu()
     
-    st.markdown('##')
+    st.markdown('<br>', unsafe_allow_html=True)
     st.markdown(get_app_info(), unsafe_allow_html=True)
-    st.markdown('#')
+    st.markdown('<br>', unsafe_allow_html=True)
     clear_button()
 
 
