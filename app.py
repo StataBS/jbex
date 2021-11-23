@@ -61,13 +61,15 @@ def get_app_info():
 def remove_menu():
     text = """<style>#MainMenu {visibility: hidden;} footer {visibility: hidden;} header {visibility: hidden;}</style>"""
     return text
+
+
 def page_boarder():
     text = f"""<style>
         .reportview-container .main .block-container{{
-        padding-top: {2}rem;
-        padding-right: {1}rem;
-        padding-left: {1}rem;
-        padding-bottom: {10}rem;
+        padding-top: 1rem;
+        padding-right: 1rem;
+        padding-left: 1rem;
+        padding-bottom: 10rem;
         }}</style>"""
     return text
 
@@ -132,18 +134,14 @@ def main():
     st.set_page_config(page_title=my_name_short, page_icon='./images/favicon.png', layout='wide', initial_sidebar_state='auto') 
     st.markdown(remove_menu(), unsafe_allow_html=True)
     st.markdown(page_boarder(),unsafe_allow_html=True,)
-
     show_titel()
     st.markdown('<br>', unsafe_allow_html=True)
     initial_widget_states()
     print_anleitung()
-    st.markdown('<br>', unsafe_allow_html=True)
-    st.markdown(f'<p style="font-size:16px";><b>Viel Spass bei der Datenrecherche; wir hoffen, Sie werden rasch fündig!</b></p>', unsafe_allow_html=True)
-    st.markdown('<br>', unsafe_allow_html=True)
+    st.markdown(f'<p style="font-size:16px";><br><b>Viel Spass bei der Datenrecherche; wir hoffen, Sie werden rasch fündig!</b></p><br>', unsafe_allow_html=True)
     metadata = get_data()
     app = jbex_find.App(metadata)
     app.show_menu()
-    
     st.markdown('<br>', unsafe_allow_html=True)
     st.markdown(get_app_info(), unsafe_allow_html=True)
     st.markdown('<br>', unsafe_allow_html=True)

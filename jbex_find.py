@@ -30,10 +30,6 @@ class App():
         return df
 
 
-    
-            
-
-
     def get_status_list(self):
         query = qry['lookup_code'].format(80) #category status
         result  = pd.DataFrame.from_dict({'id': [-1], 'value': ['<alle>']}, orient='columns')
@@ -91,7 +87,6 @@ class App():
                     text = f"""Die untenstehende Liste enthält alle Tabellen des Themenbereichs __{liste_themenbereiche}__, welche auch das Wort __{liste_titel}__ im Titel enthält."""
 
             return text
-
 
         #Generieren eines Dictionary für die Speicherung der Suchparameter
         f = {}
@@ -157,10 +152,9 @@ class App():
         st.subheader('__Jahrbücher__')
         jb_von = int(tabelle['Daten-Start'])
         jb_bis = CURRENT_YEAR -1 if tabelle['Daten-Ende'] == 'nan' else int(tabelle['Daten-Ende'])
-        text = f"""Die Tabelle __{str(tabelle['Titel'])}__ wird in __{len(df)}__ verschiedenen Jahrbüchern geführt. 
-        Im Jahrbuch aus dem Jahr __{df['Jahrbuecher'].iloc[0]}__ findet man die ältesten Daten, welche aus dem Jahr __{jb_von}__ stammen. 
-        Die jüngsten Daten findet man im Jahrbuch __{df.iat[-1,-1]}__; sie stammen aus dem Jahr __{jb_bis}__. 
-        \n \n Klicken Sie auf den Link, um die PDF-Datei zu öffnen:"""
+        text = f"""Die Tabelle __'{str(tabelle['Titel'])}'__ wird in den Ausgaben von __{df['Jahrbuecher'].iloc[0]}__ bis __{jb_bis}__ in __{len(df)}__ 
+        verschiedenen Jahrbüchern geführt. Die Einzeldaten decken einen Zeitraum von __{jb_von}__ bis __{df.iat[-1,-1]}__ ab. 
+        \n \n Klicken Sie auf den Link, um die PDF-Datei des jeweiligen Jahrbuchs zu öffnen:"""
         st.markdown(text)
         liste = ''
         for jahr in df['Jahrbuecher']:  
