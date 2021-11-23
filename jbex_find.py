@@ -113,7 +113,7 @@ class App():
         placeholder_themenbereich = st.empty()
         with placeholder_themenbereich.container():
             st.write("🔎 Themenbereich auswählen:")
-            col1, col2=st.columns([1.4,1])
+            col1, col2=st.columns([1.315,1])
             with col1:
                 f['themenbereich'] = st.multiselect(label='Themenbereich:',options=tools.sort_themenbereich(), key='multi1')
             with col2:
