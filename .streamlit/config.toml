@@ -5,7 +5,6 @@ enableXsrfProtection=false
 
 
 [theme]
-
 primaryColor = '#070707'
 backgroundColor = '#fcfcfc'
 secondaryBackgroundColor = '#e3e3e3'
