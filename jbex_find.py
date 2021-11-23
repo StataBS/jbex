@@ -30,6 +30,10 @@ class App():
         return df
 
 
+    
+            
+
+
     def get_status_list(self):
         query = qry['lookup_code'].format(80) #category status
         result  = pd.DataFrame.from_dict({'id': [-1], 'value': ['<alle>']}, orient='columns')

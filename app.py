@@ -40,7 +40,7 @@ def get_app_info():
     <style>
         #appinfo {{
         font-size: 11px;
-        background-color: lightblue;
+        background-color: #e3e3e3;
         padding-top: 10px;
         padding-right: 10px;
         padding-bottom: 10px;
