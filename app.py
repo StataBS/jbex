@@ -59,7 +59,16 @@ def get_app_info():
 
 
 def remove_menu():
-    text = """<style>#MainMenu {visibility: hidden;}footer {visibility: hidden;}header {visibility: hidden;}</style>"""
+    text = """<style>#MainMenu {visibility: hidden;} footer {visibility: hidden;} header {visibility: hidden;}</style>"""
+    return text
+def page_boarder():
+    text = f"""<style>
+        .reportview-container .main .block-container{{
+        padding-top: {2}rem;
+        padding-right: {1}rem;
+        padding-left: {1}rem;
+        padding-bottom: {10}rem;
+        }}</style>"""
     return text
 
 
@@ -122,6 +131,8 @@ def get_data():
 def main():
     st.set_page_config(page_title=my_name_short, page_icon='./images/favicon.png', layout='wide', initial_sidebar_state='auto') 
     st.markdown(remove_menu(), unsafe_allow_html=True)
+    st.markdown(page_boarder(),unsafe_allow_html=True,)
+
     show_titel()
     st.markdown('<br>', unsafe_allow_html=True)
     initial_widget_states()
