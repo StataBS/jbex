@@ -6,7 +6,7 @@ enableXsrfProtection=false
 
 [theme]
 
-primaryColor = '#FF0000'
-backgroundColor = '#FCFCFC'
-secondaryBackgroundColor = '#DCDCDC'
-textColor = '#000000'
+primaryColor = '#070707'
+backgroundColor = '#fcfcfc'
+secondaryBackgroundColor = '#e3e3e3'
+textColor = '#070707'

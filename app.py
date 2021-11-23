@@ -121,7 +121,7 @@ def get_data():
 
 def main():
     st.set_page_config(page_title=my_name_short, page_icon='./images/favicon.png', layout='wide', initial_sidebar_state='auto') 
-    #st.markdown(remove_menu(), unsafe_allow_html=True)
+    st.markdown(remove_menu(), unsafe_allow_html=True)
     show_titel()
     st.markdown('<br>', unsafe_allow_html=True)
     initial_widget_states()
