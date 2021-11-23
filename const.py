@@ -22,10 +22,10 @@ THEMENBEREICHE = [
 'Öffentliche Finanzen',
 'Kriminalität und Strafrecht',
 'Wirtschaftliche und soziale Situation der Bevölkerung',
-
 ]
 
 TABELLEN_FILE = './data/metadaten.txt'
+POSITIONSLISTEN_FILE = './data/positionsliste.txt'
 URL_BASE = 'https://charts.basleratlas.ch/zahlenspiegel/files/Stat-JB-BS-'
 URL_STAT_BASEL = 'https://www.statistik.bs.ch/'
 

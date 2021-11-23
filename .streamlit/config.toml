@@ -4,3 +4,9 @@ enableCORS=false
 enableXsrfProtection=false
 
 
+[theme]
+
+primaryColor = '#FF0000'
+backgroundColor = '#FCFCFC'
+secondaryBackgroundColor = '#DCDCDC'
+textColor = '#000000'

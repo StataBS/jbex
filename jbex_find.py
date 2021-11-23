@@ -101,7 +101,7 @@ class App():
         placeholder_text = st.empty()
         with placeholder_text.container():
             st.write("🔎 Wörter im Tabellentitel suchen:")
-            textinput = st.text_input("Wörter im Tabellentitel suchen:",key='text1', help='Nach einer Eingabe muss man mit der Eingabetaste bestätigen.')
+            textinput = st.text_input("Wörter im Tabellentitel suchen:",key='text1', help='Eine Eingabe muss mit der Eingabetaste bestätigen werden.')
             f['titel'] = tools.list_suchwoerter(textinput)   
         st.markdown('<br>', unsafe_allow_html=True)
         
@@ -109,15 +109,15 @@ class App():
         placeholder_themenbereich = st.empty()
         with placeholder_themenbereich.container():
             st.write("🔎 Themenbereich auswählen:")
-            col1, col2=st.columns(2)
-            with col1: 
+            col1, col2=st.columns([1.4,1])
+            with col1:
                 f['themenbereich'] = st.multiselect(label='Themenbereich:',options=tools.sort_themenbereich(), key='multi1')
             with col2:
                 themen=[]
                 for i in f['themenbereich']:  
                     themen.extend(THEMEN.get(i))
                     themen.sort()
-                f['thema'] = st.multiselect(label='Thema (optional):' ,options=themen, help="Wählen Sie immer zuerst einen Themenbereich aus." )
+                f['thema'] = st.multiselect(label='Thema (optional):' ,options=themen, help="Wählen Sie immer zuerst einen Themenbereich aus.")
         st.markdown('<br>', unsafe_allow_html=True)
 
         #Suchparameter: Einzelnes Jahrbuch
@@ -132,7 +132,6 @@ class App():
         if f['titel']!=[]:
             placeholder_jahrgang.empty()
             placeholder_themenbereich.empty()
-            f['themenbereich'].clear()
         if jahrgang_box== True:
             placeholder_themenbereich.empty()
             placeholder_text.empty()
@@ -234,10 +233,3 @@ class App():
       
             
             
-           
-
-        
-
-
-        
-    
