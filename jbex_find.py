@@ -152,8 +152,8 @@ class App():
         st.subheader('__Jahrbücher__')
         jb_von = int(tabelle['Daten-Start'])
         jb_bis = CURRENT_YEAR -1 if tabelle['Daten-Ende'] == 'nan' else int(tabelle['Daten-Ende'])
-        text = f"""Die Tabelle __'{str(tabelle['Titel'])}'__ wird in den Ausgaben von __{df['Jahrbuecher'].iloc[0]}__ bis __{jb_bis}__ in __{len(df)}__ 
-        verschiedenen Jahrbüchern geführt. Die Einzeldaten decken einen Zeitraum von __{jb_von}__ bis __{df.iat[-1,-1]}__ ab. 
+        text = f"""Die Tabelle __'{str(tabelle['Titel'])}'__ wird in den Ausgaben von __{df['Jahrbuecher'].iloc[0]}__ bis __{df['Jahrbuecher'].iloc[-1]}__ in __{len(df)}__ 
+        verschiedenen Jahrbüchern geführt. Die Einzeldaten decken einen Zeitraum von __{jb_von}__ bis __{jb_bis}__ ab. 
         \n \n Klicken Sie auf den Link, um die PDF-Datei des jeweiligen Jahrbuchs zu öffnen:"""
         st.markdown(text)
         liste = ''
