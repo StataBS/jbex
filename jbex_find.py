@@ -198,7 +198,7 @@ class App():
             name = f"**{df['Jahrbuecher'].iloc[i]}:**\t_{df['Datenjahre'].iloc[i]}_"
             liste += f"- {name} \n"   
         st.markdown(liste)
-        
+   
     
     def show_menu(self):
         df_metadata_filtered,jahrgang, jahrgang_box = self.get_tabelle() 

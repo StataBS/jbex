@@ -1,7 +1,7 @@
 import pandas as pd
 from st_aggrid import GridOptionsBuilder, AgGrid, GridUpdateMode, DataReturnMode, JsCode
 import re
-import const
+from const import *
 
 
 def get_table(tbl_dic: dict) -> str:
@@ -111,7 +111,7 @@ def remove_smallwords(wordlist):
 
 
 def sort_themenbereich():
-    liste = const.THEMENBEREICHE.copy()
+    liste = THEMENBEREICHE.copy()
     liste.sort()
     return liste
 

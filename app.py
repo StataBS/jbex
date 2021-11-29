@@ -130,6 +130,7 @@ def get_data():
     metadata = pd.read_csv(TABELLEN_FILE, sep='\t')
     return metadata
 
+
 def main():
     st.set_page_config(page_title=my_name_short, page_icon='./images/favicon.png', layout='wide', initial_sidebar_state='auto') 
     st.markdown(remove_menu(), unsafe_allow_html=True)
@@ -140,7 +141,8 @@ def main():
     print_anleitung()
     st.markdown(f'<p style="font-size:16px";><br><b>Viel Spass bei der Datenrecherche; wir hoffen, Sie werden rasch fündig!</b></p><br>', unsafe_allow_html=True)
     metadata = get_data()
-    app = jbex_find.App(metadata)
+    metadata_ohne21 = metadata.drop("JB-2021",axis=1, inplace=False)
+    app = jbex_find.App(metadata_ohne21)
     app.show_menu()
     st.markdown('<br>', unsafe_allow_html=True)
     st.markdown(get_app_info(), unsafe_allow_html=True)
