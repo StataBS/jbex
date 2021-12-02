@@ -15,7 +15,7 @@ import tools
 __author__ = 'Lukas Calmbach'
 __version__ = '0.1.0'
 version_date = '2021-11-15'
-my_name = 'Willkommen in der Jahrbuch-App'
+my_name = 'Jahrbuch-App'
 my_name_short = 'JBEx'
 
 
@@ -46,6 +46,7 @@ def get_app_info():
         padding-bottom: 10px;
         padding-left: 10px;
         border-radius: 10px;
+        width: 260px;
     }}
     </style>
     <div id ="appinfo">
@@ -67,7 +68,7 @@ def page_boarder():
     text = f"""<style>
         .reportview-container .main .block-container{{
         padding-top: 1rem;
-        padding-right: 1rem;
+        padding-right: rem;
         padding-left: 1rem;
         padding-bottom: 10rem;
         }}</style>"""
@@ -87,7 +88,7 @@ def show_titel():
     with col1:
         st_lottie(lottie_json, height=75, width=100,key="lottie1")
     with col2:
-        st.header(f"{my_name}")
+        st.header(f"Willkommen in der {my_name}")
 
 
 def initial_widget_states():
