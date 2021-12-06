@@ -59,11 +59,6 @@ def get_app_info():
     return text
 
 
-def remove_menu():
-    text = """<style>#MainMenu {visibility: hidden;} footer {visibility: hidden;} header {visibility: hidden;}</style>"""
-    return text
-
-
 def page_boarder():
     text = f"""<style>
         .reportview-container .main .block-container{{
@@ -72,6 +67,10 @@ def page_boarder():
         padding-left: 1rem;
         padding-bottom: 10rem;
         }}</style>"""
+    return text
+
+def remove_menu():
+    text = """<style>#MainMenu {visibility: hidden;} footer {visibility: hidden;} header {visibility: hidden;}</style>"""
     return text
 
 
@@ -113,6 +112,7 @@ def print_anleitung():
 
 
 def show_anleitung(exp_value: bool):
+    #Anleitung zur Suchfunktion
     placerholder_expander = st.empty()
     with placerholder_expander.expander(label="Hier können Sie gezielt in den statistischen Jahrbüchern suchen. 3 Einstiegspunkte stehen Ihnen zur Verfügung.", expanded=exp_value):
         st.markdown(f'''<p style="font-size:16px";><b>1. Freitextsuche in den Tabellen-Titeln</b><br>
@@ -128,6 +128,7 @@ def show_anleitung(exp_value: bool):
 
 @st.cache 
 def get_data():
+    #Metadaten aus einer Textdatei importieren.
     metadata = pd.read_csv(TABELLEN_FILE, sep='\t')
     return metadata
 
@@ -136,15 +137,28 @@ def main():
     st.set_page_config(page_title=my_name_short, page_icon='./images/favicon.png', layout='wide', initial_sidebar_state='auto') 
     st.markdown(remove_menu(), unsafe_allow_html=True)
     st.markdown(page_boarder(),unsafe_allow_html=True,)
+    
+    #App-Titel anzeigen
     show_titel()
     st.markdown('<br>', unsafe_allow_html=True)
+    
+    #Status der Eingabefenster initiieren. 
     initial_widget_states()
+    
+    #Anleitung Ein-und Ausklappen
     print_anleitung()
     st.markdown(f'<p style="font-size:16px";><br><b>Viel Spass bei der Datenrecherche; wir hoffen, Sie werden rasch fündig!</b></p><br>', unsafe_allow_html=True)
+    
+    #Metadaten initiieren
     metadata = get_data()
+    #Metadaten ohne Jahrbuch 2021
     metadata_ohne21 = metadata.drop("JB-2021",axis=1, inplace=False)
+    
+    #Suchfunktion initiieren und anzeigen
     app = jbex_find.App(metadata_ohne21)
     app.show_menu()
+
+    #App-Infos anzeigen lassen
     st.markdown('<br>', unsafe_allow_html=True)
     st.markdown(get_app_info(), unsafe_allow_html=True)
     st.markdown('<br>', unsafe_allow_html=True)

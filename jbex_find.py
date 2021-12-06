@@ -129,6 +129,7 @@ class App():
                 Doppelausgabe aus den Jahren 1980/81 erschienen.""")    
         st.markdown('<br>', unsafe_allow_html=True)
 
+        #Ein und Ausklappen der einzelnen Suchfunktionen
         if f['titel']!=[]:
             placeholder_jahrgang.empty()
             placeholder_themenbereich.empty()
@@ -204,6 +205,7 @@ class App():
     def show_menu(self):
         df_metadata_filtered,jahrgang, jahrgang_box = self.get_tabelle() 
 
+        #Wenn die spezifische Jahrbuchsuchfunktion nicht aktiviert ist:
         if jahrgang_box == False:
             st.markdown('<br><br>', unsafe_allow_html=True)
             st.subheader('__Liste der Tabellen__')
@@ -212,7 +214,9 @@ class App():
             selected = tools.show_table(df_metadata_filtered, GridUpdateMode.SELECTION_CHANGED, 310, col_cfg=COL_CFG)
             if len(selected) > 0:  
                 df_datenjahre_jahre = tools.make_dataframe(selected)
-                self.show_jahrbuecher(selected[0],df_datenjahre_jahre)    
+                self.show_jahrbuecher(selected[0],df_datenjahre_jahre) 
+           
+        #Wenn die spezifische Jahrbuchsuchfunktion aktiviert ist:
         else:
             st.markdown('<br><br>', unsafe_allow_html=True)
             self.show_jahrbuch(jahrgang)
