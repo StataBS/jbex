@@ -101,7 +101,8 @@ class App():
         with placeholder_text.container():
             st.write("🔎 Wörter im Tabellentitel suchen:")
             textinput = st.text_input("Wörter im Tabellentitel suchen:",key='text1', help='Eine Eingabe muss mit der Eingabetaste bestätigen werden.')
-            f['titel'] = tools.list_suchwoerter(textinput)   
+            st.write(textinput)
+            f['titel'] = tools.list_suchwoerter(textinput) 
         st.markdown('<br>', unsafe_allow_html=True)
         
         #Suchparameter: Themenbereiche und die Themen .

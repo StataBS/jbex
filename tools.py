@@ -43,6 +43,37 @@ def make_dic(df: pd.DataFrame, key_col: str, value_col: str):
     return result
 
 
+
+def list_suchwoerter(textinput:str):
+    wordlist = re.split(r'[\b\W\b]+',textinput)
+    j=0
+    while j <=4:
+        wordlist = remove_smallwords(wordlist)
+        for word in wordlist:
+            for i in ["oder","und","der","die","das","den","diesen","dem","dieser"]:
+                if word==i:
+                    wordlist.pop(wordlist.index(word))
+                else:
+                    continue
+        j +=1
+    return wordlist
+
+
+def remove_smallwords(wordlist):
+    for word in wordlist: 
+        if len(word)<3:
+            wordlist.pop(wordlist.index(word))
+        else:
+            continue
+    return wordlist
+
+
+def sort_themenbereich():
+    liste = THEMENBEREICHE.copy()
+    liste.sort()
+    return liste
+
+
 def get_href(tit, url):
     result = f'<a href = "{url}" target = "_blank">{tit}</a>'
     return result
@@ -88,32 +119,6 @@ def show_table(df:pd.DataFrame, update_mode, height: int, col_cfg:list=[]):
     df_result = grid_response['data']
     selected = grid_response['selected_rows']
     return selected
-
-
-def list_suchwoerter(textinput:str):
-    wordlist = re.split(r'[\b\W\b]+',textinput)
-    wordlist = remove_smallwords(wordlist)
-    for word in wordlist:
-        if word=="oder":
-            wordlist.pop(wordlist.index(word))
-        else:
-            continue
-    return wordlist
-
-
-def remove_smallwords(wordlist):
-    for word in wordlist: 
-        if len(word)<=3:
-            wordlist.pop(wordlist.index(word))
-        else:
-            continue
-    return wordlist
-
-
-def sort_themenbereich():
-    liste = THEMENBEREICHE.copy()
-    liste.sort()
-    return liste
 
 
 
