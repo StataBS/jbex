@@ -114,16 +114,17 @@ def print_anleitung():
 def show_anleitung(exp_value: bool):
     #Anleitung zur Suchfunktion
     placerholder_expander = st.empty()
-    with placerholder_expander.expander(label="Hier können Sie gezielt in den statistischen Jahrbüchern suchen. 3 Einstiegspunkte stehen Ihnen zur Verfügung.", expanded=exp_value):
+    with placerholder_expander.expander(label="Hier können Sie gezielt in den Statistischen Jahrbüchern suchen. 3 Einstiegspunkte stehen Ihnen zur Verfügung.", expanded=exp_value):
         st.markdown(f'''<p style="font-size:16px";><b>1. Freitextsuche in den Tabellen-Titeln</b><br>
         Sie können mehrere Suchbegriffe kombinieren. So erhalten Sie rasch einen Überblick, 
         ob Zahlen zu Ihren Suchbegriffen vorhanden sind und über welchen Zeitraum.<br>  
         <b>2. Thematische Suche</b><br>  
         Das Feld "Themenbereich" enthält eine Auswahlliste, die nach den 19 Themen der öffentlichen Statistik gegliedert ist. 
         Zur weiteren Eingrenzung ist jeder Themenbereich in Themen unterteilt.<br>  
-        <b>3. Suche nach Jahrbuch-Ausgaben</b><br>  
-        Falls Sie an einer speziellen Jahrbuch-Ausgabe interessiert sind.  
-        \n Die Ergebnisse Ihrer Suche werden in Form einer Liste mit Tabellen ausgegeben.</p>''', unsafe_allow_html=True)
+        <b>3. Suche nach Jahrbuch-Ausgaben</b><br>
+        Falls Sie an einer speziellen Jahrbuch-Ausgabe interessiert sind.<br><br> 
+        Die Ergebnisse Ihrer Suche werden in Form einer Liste mit Tabellen ausgegeben.<br>
+        <b>Viel Erfolg bei der Datenrecherche!</b></p>''', unsafe_allow_html=True)
 
 
 @st.cache 
@@ -147,7 +148,7 @@ def main():
     
     #Anleitung Ein-und Ausklappen
     print_anleitung()
-    st.markdown(f'<p style="font-size:16px";><br><b>Viel Spass bei der Datenrecherche; wir hoffen, Sie werden rasch fündig!</b></p><br>', unsafe_allow_html=True)
+    st.markdown(f'<p style="font-size:16px";><br></p><br>', unsafe_allow_html=True)
     
     #Metadaten initiieren
     metadata = get_data()
@@ -158,11 +159,12 @@ def main():
     app = jbex_find.App(metadata_ohne21)
     app.show_menu()
 
+
     #App-Infos anzeigen lassen
     st.markdown('<br>', unsafe_allow_html=True)
     st.markdown(get_app_info(), unsafe_allow_html=True)
     st.markdown('<br>', unsafe_allow_html=True)
-    clear_button()
+    #clear_button()
 
 
 if __name__ == '__main__':
