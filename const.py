@@ -140,3 +140,10 @@ JAHRBUECHER = list(range(1921,1980,1))+ list(range(1981,(date.today().year),1))
 COL_CFG = [{"name":"Titel","width":400,"suppressSizeToFit":False},
                     {"name":"Themenbereich","width":120,"suppressSizeToFit":False},
                     {"name":"Thema","width":120,"suppressSizeToFit":False}]
+
+
+CHANGE_TEXT_MULTISELECT = """<style>
+div.st-cs.st-c5.st-bc.st-ct.st-cu {visibility: hidden;}
+div.st-cs.st-c5.st-bc.st-ct.st-cu:before {content: "Wähle eine Option"; visibility: visible;}
+</style>
+"""

@@ -100,6 +100,7 @@ class App():
         placeholder_text = st.empty()
         with placeholder_text.container():
             st.write("🔎 Wörter im Tabellentitel suchen:")
+            st.markdown('<br>', unsafe_allow_html=True)
             textinput = st.text_input("Wörter im Tabellentitel suchen:",key='text1', help='Eine Eingabe muss mit der Eingabetaste bestätigen werden.')
             st.write(textinput)
             f['titel'] = tools.list_suchwoerter(textinput) 
@@ -111,12 +112,14 @@ class App():
             st.write("🔎 Themenbereich auswählen:")
             col1, col2=st.columns([1.315,1])
             with col1:
+                st.markdown(CHANGE_TEXT_MULTISELECT,unsafe_allow_html=True)
                 f['themenbereich'] = st.multiselect(label='Themenbereich:',options=tools.sort_themenbereich(), key='multi1')
             with col2:
                 themen=[]
                 for i in f['themenbereich']:  
                     themen.extend(THEMEN.get(i))
                     themen.sort()
+                st.markdown(CHANGE_TEXT_MULTISELECT,unsafe_allow_html=True)
                 f['thema'] = st.multiselect(label='Thema (optional):' ,options=themen, help="Wählen Sie immer zuerst einen Themenbereich aus.")
         st.markdown('<br>', unsafe_allow_html=True)
 
