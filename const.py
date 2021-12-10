@@ -143,10 +143,10 @@ COL_CFG = [{"name":"Titel","width":400,"suppressSizeToFit":False},
 
 CHANGE_TEXT_MULTI1 = '''
 <style>
-div.st-ea.st-de.st-cr.st-eb.st-ec{visibility: hidden;}
-div.st-ea.st-de.st-cr.st-eb.st-ec:before {content: "Option wählen"; visibility: visible; }
+div.st-e4.st-d8.st-cl.st-e5.st-e6{visibility: hidden;}
+div.st-e4.st-d8.st-cl.st-e5.st-e6:before {content: "Option wählen"; visibility: visible; }
 </style>'''
 CHANGE_TEXT_MULTI2 = '''
 <style>
-div.st-eg.st-de.st-cr.st-eb.st-ec{visibility: hidden;}
+div.st-ea.st-d8.st-cl.st-e5.st-e6{visibility: hidden;}
 </style>'''
