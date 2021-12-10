@@ -141,9 +141,12 @@ COL_CFG = [{"name":"Titel","width":400,"suppressSizeToFit":False},
                     {"name":"Themenbereich","width":120,"suppressSizeToFit":False},
                     {"name":"Thema","width":120,"suppressSizeToFit":False}]
 
-
-CHANGE_TEXT_MULTISELECT = """<style>
-div.st-cs.st-c5.st-bc.st-ct.st-cu {visibility: hidden;}
-div.st-cs.st-c5.st-bc.st-ct.st-cu:before {content: "Wähle eine Option"; visibility: visible;}
-</style>
-"""
+CHANGE_TEXT_MULTI1 = '''
+<style>
+div.st-ea.st-de.st-cr.st-eb.st-ec{visibility: hidden;}
+div.st-ea.st-de.st-cr.st-eb.st-ec:before {content: "Option wählen"; visibility: visible; }
+</style>'''
+CHANGE_TEXT_MULTI2 = '''
+<style>
+div.st-eg.st-de.st-cr.st-eb.st-ec{visibility: hidden;}
+</style>'''

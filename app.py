@@ -70,7 +70,11 @@ def page_boarder():
     return text
 
 def remove_menu():
-    text = """<style>#MainMenu {visibility: hidden;} footer {visibility: hidden;} header {visibility: hidden;}</style>"""
+    text = """<style>
+    #MainMenu {visibility: hidden;} 
+    #footer {visibility: hidden;} 
+    #header {visibility: hidden;}
+    </style>"""
     return text
 
 
