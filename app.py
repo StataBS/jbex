@@ -75,7 +75,7 @@ def remove_menu():
 
 
 def clear_button():
-    st.markdown('''<style> div.stButton>button:first-child{font-size: 9px;}</style>''', unsafe_allow_html=True)
+    st.markdown(CHANGE_STYLE_CLEARBUTTON, unsafe_allow_html=True)
     button1=st.button(label="Clear Cache", key="button1")
     if button1:
         st.legacy_caching.clear_cache()
@@ -113,6 +113,7 @@ def print_anleitung():
 
 def show_anleitung(exp_value: bool):
     #Anleitung zur Suchfunktion
+    st.markdown(CHANGE_STYLE_ANLEITUNG,unsafe_allow_html=True)
     placerholder_expander = st.empty()
     with placerholder_expander.expander(label="Hier können Sie gezielt in den Statistischen Jahrbüchern suchen. 3 Einstiegspunkte stehen Ihnen zur Verfügung.", expanded=exp_value):
         st.markdown(f'''<p style="font-size:16px";><b>1. Freitextsuche in den Tabellen-Titeln</b><br>

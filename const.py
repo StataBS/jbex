@@ -141,7 +141,19 @@ COL_CFG = [{"name":"Titel","width":400,"suppressSizeToFit":False},
                     {"name":"Themenbereich","width":120,"suppressSizeToFit":False},
                     {"name":"Thema","width":120,"suppressSizeToFit":False}]
 
-CHANGE_TEXT_MULTI1 = '''
+CHANGE_STYLE_MULTI1 = '''
 <style>
 div.row-widget.stMultiSelect>div>div>div>div{color: #e3e3e3;}
+</style>'''
+
+
+CHANGE_STYLE_ANLEITUNG =''' 
+<style>
+div.streamlit-expanderHeader{font-size:16px}
+</style>
+'''
+
+CHANGE_STYLE_CLEARBUTTON='''
+<style> 
+div.stButton>button:first-child{font-size: 9px;}
 </style>'''
