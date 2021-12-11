@@ -102,7 +102,6 @@ class App():
             st.write("🔎 Wörter im Tabellentitel suchen:")
             st.markdown('<br>', unsafe_allow_html=True)
             textinput = st.text_input("Wörter im Tabellentitel suchen:",key='text1', help='Eine Eingabe muss mit der Eingabetaste bestätigen werden.')
-            st.write(textinput)
             f['titel'] = tools.list_suchwoerter(textinput) 
         st.markdown('<br>', unsafe_allow_html=True)
         
