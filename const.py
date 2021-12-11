@@ -143,7 +143,9 @@ COL_CFG = [{"name":"Titel","width":400,"suppressSizeToFit":False},
 
 CHANGE_STYLE_MULTI1 = '''
 <style>
-div.row-widget.stMultiSelect>div>div>div>div{color: #e3e3e3;}
+div.row-widget.stMultiSelect>div[data-baseweb="select"]>div>div>div:nth-child(2n+0){visibility: hidden;}
+div.row-widget.stMultiSelect>div[data-baseweb="select"]>div>div>div:nth-child(2n+0)::before{content: "Option wählen"; visibility: visible;}
+div.row-widget.stMultiSelect>div[data-baseweb="select"]>div>div:first-child{color:#e3e3e3;}
 </style>'''
 
 
