@@ -166,7 +166,7 @@ def main():
     st.markdown('<br>', unsafe_allow_html=True)
     st.markdown(get_app_info(), unsafe_allow_html=True)
     st.markdown('<br>', unsafe_allow_html=True)
-    clear_button()
+    #clear_button()
 
 
 if __name__ == '__main__':
