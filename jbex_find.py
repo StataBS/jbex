@@ -18,10 +18,11 @@ import app
 
 CURRENT_YEAR = date.today().year
 class App():
-    def __init__(self, metadata):
+    def __init__(self, metadata, positionsliste):
         self.record = {}
         self.metadata_df = metadata
         self.metadata_filtered = self.metadata_df
+        self.positionsliste = positionsliste
 
     
     def get_metadata(self):
@@ -161,14 +162,14 @@ class App():
         \n \n Klicken Sie auf den Link, um die PDF-Datei des jeweiligen Jahrbuchs zu öffnen:"""
         st.markdown(text)
         liste = ''
-        for jahr in df['Jahrbuecher']:  
-            if jahr != 1981:
-                url = f"{URL_BASE}{jahr}.pdf"
-                name = f'Statistisches Jahrbuch des Kantons Basel-Stadt {jahr}'
+        for i in df.index:
+            if   pd.notna(df['Position'][i]):
+                url = f"{URL_BASE}{df['Jahrbuecher'][i]}.pdf#page={df['Position'][i]}"
+                name = f"Statistisches Jahrbuch des Kantons Basel-Stadt {df['Jahrbuecher'][i]}"
                 liste += f"- [{name}]({url}) \n"
-            elif jahr == 1981:
-                url = f"{URL_BASE}{jahr}.pdf"
-                name = f'Statistisches Jahrbuch des Kantons Basel-Stadt 1980/81'
+            else:
+                url = f"{URL_BASE}{df['Jahrbuecher'][i]}.pdf"
+                name = f"Statistisches Jahrbuch des Kantons Basel-Stadt {df['Jahrbuecher'][i]}"
                 liste += f"- [{name}]({url}) \n"
         st.markdown(liste)
 
@@ -214,8 +215,8 @@ class App():
             st.markdown('''__Markieren Sie einen Tabellentitel, um zu sehen, 
             in welchen Jahrbüchern Daten vorhanden sind. Die Jahrbücher werden als interaktive Links angezeigt.__''')
             selected = tools.show_table(df_metadata_filtered, GridUpdateMode.SELECTION_CHANGED, 310, col_cfg=COL_CFG)
-            if len(selected) > 0:  
-                df_datenjahre_jahre = tools.make_dataframe(selected)
+            if len(selected) > 0: 
+                df_datenjahre_jahre = tools.make_dataframe(selected,self.positionsliste)
                 self.show_jahrbuecher(selected[0],df_datenjahre_jahre) 
            
         #Wenn die spezifische Jahrbuchsuchfunktion aktiviert ist:
@@ -231,7 +232,7 @@ class App():
                 selected = tools.show_table(df_metadata_filtered[df_metadata_filtered[f"JB-1980/81"].str.contains("x")==False], GridUpdateMode.SELECTION_CHANGED, 340, col_cfg=COL_CFG)
             
             if len(selected) > 0: 
-               df_datenjahre_jahre = tools.make_dataframe(selected)
+               df_datenjahre_jahre = tools.make_dataframe(selected,self.positionsliste)
                self.show_jahrbuecher(selected[0],df_datenjahre_jahre)
            
            

@@ -13,8 +13,8 @@ import tools
 
 
 __author__ = 'Lukas Calmbach'
-__version__ = '0.1.0'
-version_date = '2021-11-15'
+__version__ = '0.1.1'
+version_date = '2021-12-14'
 my_name = 'Jahrbuch-App'
 my_name_short = 'JBEx'
 
@@ -132,7 +132,8 @@ def show_anleitung(exp_value: bool):
 def get_data():
     #Metadaten aus einer Textdatei importieren.
     metadata = pd.read_csv(TABELLEN_FILE, sep='\t')
-    return metadata
+    positionsliste = pd.read_csv(POSITIONSLISTEN_FILE, sep='\t')
+    return metadata, positionsliste
 
 
 def main():
@@ -152,12 +153,12 @@ def main():
     st.markdown(f'<p style="font-size:16px";><br></p><br>', unsafe_allow_html=True)
     
     #Metadaten initiieren
-    metadata = get_data()
+    metadata, positionsliste = get_data()
     #Metadaten ohne Jahrbuch 2021
     metadata_ohne21 = metadata.drop("JB-2021",axis=1, inplace=False)
-    
+    positionsliste_ohne21 = positionsliste.drop("JB-2021",axis=1, inplace=False)
     #Suchfunktion initiieren und anzeigen
-    app = jbex_find.App(metadata_ohne21)
+    app = jbex_find.App(metadata_ohne21, positionsliste_ohne21)
     app.show_menu()
 
 
@@ -165,7 +166,7 @@ def main():
     st.markdown('<br>', unsafe_allow_html=True)
     st.markdown(get_app_info(), unsafe_allow_html=True)
     st.markdown('<br>', unsafe_allow_html=True)
-    #clear_button()
+    clear_button()
 
 
 if __name__ == '__main__':

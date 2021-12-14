@@ -21,9 +21,22 @@ def get_list_index(lst: list, value):
     return result
 
 
-def make_dataframe(selected: list ):
+def make_dataframe(selected: list, df1: pd.DataFrame ):
     listval = []
     listkeys = []
+    listepos =[]
+
+    #Positionsliste der gewählten Tabelle umwandeln
+    df_pos = df1[df1['Kürzel']==selected[0]['Kürzel']].astype('str').transpose()[6:]
+    df_pos.columns=["Position"]
+    for x in df_pos.index:
+        if x == "JB-1980/81":
+            listepos.append(int(1981))
+        else:
+            listepos.append(int(re.sub("\D","",x)))          
+    df_pos['Jahrbuecher'] = listepos
+    
+    #Datenjahre der gewählten Tabelle umwandeln
     listval = list(selected[0].values())[6:]
     listkeys = [re.sub("\D","",x) for x in list(selected[0].keys())[6:]]
     for i, val in enumerate(listkeys):
@@ -32,7 +45,11 @@ def make_dataframe(selected: list ):
                         listkeys[i] = 1981
     df = pd.DataFrame(data=[listval,listkeys]).transpose()
     df.columns=['Datenjahre', 'Jahrbuecher']
-    df_selected= df[df['Datenjahre'].str.contains("x")==False]
+    
+    #Zusammenführen der Tabellen
+    df = pd.merge(df,df_pos, on="Jahrbuecher", how="left")
+    df_selected = df[df['Datenjahre'].str.contains("x")==False]
+    df_selected['Position'] = (df_selected['Position'].astype('float', copy=False)).astype('int64', copy=False)
     return df_selected
 
 
