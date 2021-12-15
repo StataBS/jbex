@@ -2,6 +2,7 @@ import pandas as pd
 from st_aggrid import GridOptionsBuilder, AgGrid, GridUpdateMode, DataReturnMode, JsCode
 import re
 from const import *
+import numpy as np
 
 
 def get_table(tbl_dic: dict) -> str:
@@ -27,8 +28,10 @@ def make_dataframe(selected: list, df1: pd.DataFrame ):
     listepos =[]
 
     #Positionsliste der gewählten Tabelle umwandeln
-    df_pos = df1[df1['Kürzel']==selected[0]['Kürzel']].astype('str').transpose()[6:]
+    
+    df_pos = df1[df1['Kürzel']==selected[0]['Kürzel']].transpose()[6:]
     df_pos.columns=["Position"]
+    
     for x in df_pos.index:
         if x == "JB-1980/81":
             listepos.append(int(1981))
@@ -49,7 +52,8 @@ def make_dataframe(selected: list, df1: pd.DataFrame ):
     #Zusammenführen der Tabellen
     df = pd.merge(df,df_pos, on="Jahrbuecher", how="left")
     df_selected = df[df['Datenjahre'].str.contains("x")==False]
-    df_selected['Position'] = (df_selected['Position'].astype('float', copy=False)).astype('int64', copy=False)
+    df_selected = df_selected.copy()
+    df_selected[['Position']]=df_selected[['Position']].astype('int64')
     return df_selected
 
 

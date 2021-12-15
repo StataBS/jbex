@@ -159,3 +159,14 @@ CHANGE_STYLE_CLEARBUTTON='''
 <style> 
 div.stButton>button:first-child{font-size: 9px;}
 </style>'''
+
+
+DICT_DTYPE =  {
+    "Kürzel": str,
+    "ID": int,
+    "Titel": str,
+    "Typ": str,
+    "Sort": int,
+    "Lauf-Nr.": int,
+    
+}
