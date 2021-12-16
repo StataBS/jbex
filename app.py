@@ -131,7 +131,7 @@ def show_anleitung(exp_value: bool):
 @st.cache 
 def get_data():
     #Metadaten aus einer Textdatei importieren.
-    metadata = pd.read_csv(TABELLEN_FILE, sep='\t')
+    metadata = pd.read_csv(TABELLEN_FILE, sep='\t').fillna(value="x")
     positionsliste = pd.read_csv(POSITIONSLISTEN_FILE, sep='\t', na_values=[" ","x"]).fillna(value=0)
     return metadata, positionsliste
 
@@ -154,14 +154,9 @@ def main():
     
     #Metadaten initiieren
     metadata, positionsliste = get_data()
-    #Metadaten ohne Jahrbuch 2021
-    metadata_ohne21 = metadata.drop("JB-2021",axis=1, inplace=False)
-    positionsliste_ohne21 = positionsliste.drop("JB-2021",axis=1, inplace=False)
-    
     #Suchfunktion initiieren und anzeigen
-    app = jbex_find.App(metadata_ohne21, positionsliste_ohne21)
+    app = jbex_find.App(metadata, positionsliste)
     app.show_menu()
-
 
     #App-Infos anzeigen lassen
     st.markdown('<br>', unsafe_allow_html=True)

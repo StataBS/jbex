@@ -27,19 +27,6 @@ def make_dataframe(selected: list, df1: pd.DataFrame ):
     listkeys = []
     listepos =[]
 
-    #Positionsliste der gewählten Tabelle umwandeln
-    
-    df_pos = df1[df1['Kürzel']==selected[0]['Kürzel']].transpose()[6:]
-    df_pos.columns=["Position"]
-    
-    for x in df_pos.index:
-        if x == "JB-1980/81":
-            listepos.append(int(1981))
-        else:
-            listepos.append(int(re.sub("\D","",x)))          
-    df_pos['Jahrbuecher'] = listepos
-    
-    #Datenjahre der gewählten Tabelle umwandeln
     listval = list(selected[0].values())[6:]
     listkeys = [re.sub("\D","",x) for x in list(selected[0].keys())[6:]]
     for i, val in enumerate(listkeys):
@@ -48,13 +35,38 @@ def make_dataframe(selected: list, df1: pd.DataFrame ):
                         listkeys[i] = 1981
     df = pd.DataFrame(data=[listval,listkeys]).transpose()
     df.columns=['Datenjahre', 'Jahrbuecher']
+
+
+    #Positionsliste der gewählten Tabelle umwandeln
+    if all(df1['Kürzel']!=selected[0]['Kürzel']):
+        zeros = pd.Series(data=np.zeros(len(df['Datenjahre']),dtype="int"),name='Position')
+        df=df.join(zeros)
+        df_selected = df[df['Datenjahre'].str.contains("x")==False]
+        return df_selected
+
     
+    else:
+        df_pos = df1[df1['Kürzel']==selected[0]['Kürzel']].transpose()[4:]
+        df_pos.columns=["Position"]
+    #Datenjahre der gewählten Tabelle umwandeln
+        for x in df_pos.index:
+            if x == "JB-1980/81":
+                listepos.append(int(1981))
+            else:
+                listepos.append(int(re.sub("\D","",x)))          
+        df_pos['Jahrbuecher'] = listepos
     #Zusammenführen der Tabellen
-    df = pd.merge(df,df_pos, on="Jahrbuecher", how="left")
-    df_selected = df[df['Datenjahre'].str.contains("x")==False]
-    df_selected = df_selected.copy()
-    df_selected[['Position']]=df_selected[['Position']].astype('int64')
-    return df_selected
+        df = pd.merge(df,df_pos, on="Jahrbuecher", how="left")
+        df_selected = df[df['Datenjahre'].str.contains("x")==False]
+        df_selected = df_selected.copy()
+        df_selected[['Position']]=df_selected[['Position']].astype('int64')
+        return df_selected
+    
+    
+    
+    
+    
+    
 
 
 def make_dic(df: pd.DataFrame, key_col: str, value_col: str):
@@ -71,7 +83,7 @@ def list_suchwoerter(textinput:str):
     while j <=4:
         wordlist = remove_smallwords(wordlist)
         for word in wordlist:
-            for i in ["oder","und","der","die","das","den","diesen","dem","dieser"]:
+            for i in ["oder","und","der","die","das","den","diesen","dem","dieser", "nach"]:
                 if word==i:
                     wordlist.pop(wordlist.index(word))
                 else:
