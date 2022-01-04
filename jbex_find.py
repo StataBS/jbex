@@ -129,7 +129,7 @@ class App():
         with placeholder_jahrgang.container():
             jahrgang_box=st.checkbox("Eine spezifische Jahrbuch-Ausgabe auswählen.", key='check1')
         if jahrgang_box== True:
-            f['jahrgang']=st.number_input(f'Jahrbuch zwischen 1921 und {CURRENT_YEAR}',max_value=(CURRENT_YEAR), min_value=1921, help="""Im Jahr 1981 ist eine
+            f['jahrgang']=st.number_input(f'Jahrbuch zwischen 1921 und {CURRENT_YEAR-1}',max_value=(CURRENT_YEAR-1), min_value=1921, help="""Im Jahr 1981 ist eine
                 Doppelausgabe aus den Jahren 1980/81 erschienen.""")    
         st.markdown('<br>', unsafe_allow_html=True)
 
@@ -157,7 +157,7 @@ class App():
         #Liste aus Hyperlinks mit allen Jahrbücher erstellen, sowie Informationen zu Daten und Themenbereich ausgeben.
         st.subheader('__Jahrbücher__')
         jb_von = int(tabelle['Daten-Start'])
-        jb_bis = CURRENT_YEAR if tabelle['Daten-Ende']=='nan' else int(tabelle['Daten-Ende'])
+        jb_bis = CURRENT_YEAR if tabelle['Daten-Ende']== 0 else int(tabelle['Daten-Ende'])
         text = f"""Die Tabelle __'{str(tabelle['Titel'])}'__ wird in den Ausgaben von __{df['Jahrbuecher'].iloc[0]}__ bis __{df['Jahrbuecher'].iloc[-1]}__ in __{len(df)}__ 
         verschiedenen Jahrbüchern geführt. Die Einzeldaten decken einen Zeitraum von __{jb_von}__ bis __{jb_bis}__ ab. 
         \n \n Klicken Sie auf den Link, um die PDF-Datei des jeweiligen Jahrbuchs zu öffnen:"""

@@ -14,7 +14,7 @@ import tools
 
 __author__ = 'Lukas Calmbach'
 __version__ = '0.1.1'
-version_date = '2021-12-14'
+version_date = '2022-01-04'
 my_name = 'Jahrbuch-App'
 my_name_short = 'JBEx'
 
@@ -162,7 +162,7 @@ def main():
     st.markdown('<br>', unsafe_allow_html=True)
     st.markdown(get_app_info(), unsafe_allow_html=True)
     st.markdown('<br>', unsafe_allow_html=True)
-    #clear_button()
+    clear_button()
 
 
 if __name__ == '__main__':
