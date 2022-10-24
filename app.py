@@ -62,11 +62,11 @@ def get_app_info():
 
 def page_boarder():
     text = f"""<style>
-        .reportview-container .main .block-container{{
+        .main .block-container{{
         padding-top: 1rem;
-        padding-right: rem;
-        padding-left: 1rem;
-        padding-bottom: 10rem;
+        padding-right: 2rem;
+        padding-left: 2rem;
+        padding-bottom: 2rem;
         }}</style>"""
     return text
 
