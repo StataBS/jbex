@@ -1,7 +1,7 @@
 """
 Diese App erlaubt das Browsen von Jahrbüchern
 
-Kontakt: lukas.calmbach@bs.ch
+Kontakt: lukas.calmbach@bs.ch, niklaus.baltisberger@bs.ch
 """
 from enum import Enum
 import io
@@ -14,6 +14,10 @@ import re
 import tools
 import app
 import numpy as np
+import fitz
+import base64
+import time
+
 
 
 
@@ -50,7 +54,6 @@ class App():
                 self.metadata_filtered = self.metadata_filtered[self.metadata_filtered['Themenbereich'].isin(filter['themenbereich'])]
             else:
                 self.metadata_filtered = self.metadata_filtered[self.metadata_filtered['Thema'].isin(filter['thema'])]
-
 
 
     def get_tabelle(self):
@@ -121,12 +124,13 @@ class App():
                     themen.extend(THEMEN.get(i))
                     themen.sort()
                 st.markdown(CHANGE_STYLE_MULTI1,unsafe_allow_html=True)
-                f['thema'] = st.multiselect(label='Thema (optional):' ,options=themen, help="Wählen Sie immer zuerst einen Themenbereich aus.")
+                f['thema'] = st.multiselect(label='Thema (optional):' ,options=themen, help="Wählen Sie immer zuerst einen Themenbereich aus.", key="multi2")
         st.markdown('<br>', unsafe_allow_html=True)
 
         #Suchparameter: Einzelnes Jahrbuch
         placeholder_jahrgang = st.empty()
         with placeholder_jahrgang.container():
+            st.write("🔎 Jahrbuch-Ausgabe auswählen:")
             jahrgang_box=st.checkbox("Eine spezifische Jahrbuch-Ausgabe auswählen.", key='check1')
         if jahrgang_box== True:
             f['jahrgang']=st.number_input(f'Jahrbuch zwischen 1921 und {CURRENT_YEAR-1}',max_value=(CURRENT_YEAR-1), min_value=1921, help="""Im Jahr 1981 ist eine
@@ -157,7 +161,7 @@ class App():
         #Liste aus Hyperlinks mit allen Jahrbücher erstellen, sowie Informationen zu Daten und Themenbereich ausgeben.
         st.subheader('__Jahrbücher__')
         jb_von = int(tabelle['Daten-Start'])
-        jb_bis = CURRENT_YEAR if tabelle['Daten-Ende']== 0 else int(tabelle['Daten-Ende'])
+        jb_bis = CURRENT_YEAR-1 if tabelle['Daten-Ende']== 0 else int(tabelle['Daten-Ende'])
         text = f"""Die Tabelle __'{str(tabelle['Titel'])}'__ wird in den Ausgaben von __{df['Jahrbuecher'].iloc[0]}__ bis __{df['Jahrbuecher'].iloc[-1]}__ in __{len(df)}__ 
         verschiedenen Jahrbüchern geführt. Die Einzeldaten decken einen Zeitraum von __{jb_von}__ bis __{jb_bis}__ ab. 
         \n \n Klicken Sie auf den Link, um die PDF-Datei des jeweiligen Jahrbuchs zu öffnen:"""
@@ -204,9 +208,119 @@ class App():
             name = f"**{df['Jahrbuecher'].iloc[i]}:**\t_{df['Datenjahre'].iloc[i]}_"
             liste += f"- {name} \n"   
         st.markdown(liste)
-   
+
+
     
+    def show_preview_download_pdf(self,selected, df_datenjahre_jahre):
+        #Layout
+        st.markdown('<br><br>', unsafe_allow_html=True)
+        st.markdown(f"""Sie haben die Tabelle __'{selected["Titel"]}'__ ausgewählt. Sie können sich nun die Tabelle anzeigen 
+        lassen oder ein PDF-Dokument zum Herunterladen zusammenstellen.""") 
+        col1,col2,col3=st.columns([4.5,0.5,8])
+        with col1:
+            st.markdown(CHANGE_STYLE_SLIDER, unsafe_allow_html=True)
+            placeholderSlider = st.empty()
+        with col3:
+            st.markdown(CHANGE_STYLE_CHECKBOX, unsafe_allow_html=True)
+            placeholderCheckbox = st.empty()
+        st.markdown("<br/>", unsafe_allow_html=True)
+        placeholderTableContainer = st.empty()
+        st.markdown("<br/>", unsafe_allow_html=True)
+        placeholderEndPage = st.empty()
+        st.markdown("<br/>", unsafe_allow_html=True)
+        placeholderSelectPreviewPDF = st.empty()
+        st.markdown("<hr>", unsafe_allow_html=True)
+        st.markdown("<br/>", unsafe_allow_html=True)
+        placeholderTextPreview = st.empty()
+        placeholderPreviewContainer = st.empty()
+        placeholderButtonDownload = st.empty()
+
+        #Slider zum Auswählen der Zeitspanne und Tabelle darstellen
+        start = df_datenjahre_jahre["Jahrbuecher"].iat[0]
+        ende = df_datenjahre_jahre["Jahrbuecher"].iat[-1]
+
+        if(start != ende):
+            slider_range = placeholderSlider.slider("1. Wählen Sie eine Zeitspanne für die ausgewählte Jahrbuchtabelle aus. ",
+            value=[start,ende], min_value=start, max_value=ende, key="slider_years")
+            after_slider_df = df_datenjahre_jahre[(df_datenjahre_jahre['Jahrbuecher']>=slider_range[0]) & (df_datenjahre_jahre['Jahrbuecher']<=slider_range[1])]
+            
+        else:
+            after_slider_df = df_datenjahre_jahre[(df_datenjahre_jahre['Jahrbuecher']==start)]
+        
+
+        #Daten nach der Auswahl der Zeitspanne filtern
+        new_selected_df = pd.DataFrame()
+        #Checkbox um alle Jahrbücher in der gewählten Zeitspanne zu selektieren.
+        checkbox_allyears = placeholderCheckbox.checkbox(label="Ich möchte alle Jahrbücher aus der gewählten Zeitspanne.", key="Check_years")
+        if (checkbox_allyears==False):
+            with placeholderTableContainer.container():
+                #Erstellen der interaktiven Tabelle und filtern der Daten nach ausgewählten Jahrbüchern.
+                st.markdown(f"Selektieren Sie die gewünschten Jahrbücher in der untenstehenden Tabelle.")
+                new_selected_table = tools.show_table(after_slider_df, GridUpdateMode.SELECTION_CHANGED,300,autohight=False, col_cfg=COL_CFG_2, 
+                sel_cfg=[{"rowSelection":"multiple", "rowMultiSelectWithClick": "true"}], pag_cfg=[{"enabled": False}])
+                new_selected_df = tools.selected_dataframe(after_slider_df,new_selected_table)       
+        else:
+            placeholderTableContainer = st.empty()
+            new_selected_df = pd.DataFrame()
+    
+        #Input der Zahl für die Auswahl der fortlaufenden Tabellenseiten.
+        st.markdown(CHANGE_STYLE_NUMBERINPUT, unsafe_allow_html=True)
+        end_page = placeholderEndPage.number_input(label="2. Wie viele fortlaufende Seiten nach jeder ausgewählten Tabelle im Jahrbuch wollen Sie? (Achtung: Jahrbuchtabellen können auch über mehrere Seiten gehen!)", 
+            min_value=0,max_value=6, step=1, help="Sie können zwischen 0 bis 6 zusätzlichen Seiten auswählen.", key="numberinput_pages")
+
+        #Auswahl zwischen Preview und PDF-Dokument.
+        st.markdown(CHANGE_STYLE_SELECTBOX, unsafe_allow_html=True)
+        SelectPreviewPDF = placeholderSelectPreviewPDF.selectbox(label="3. Tabelle anzeigen lassen oder PDF-Dokument erstellen.",options= ["","Tabelle anzeigen","PDF-Dokument erstellen"],
+        key="selectbox_switch", disabled=tools.checkbox_disable_func(checkbox_allyears, new_selected_df), help="""Wählen Sie 'Tabelle anzeigen', so wird immer nur die älteste und die 
+        jüngste Tabelle angezeigt""")
+        name = f'{selected["Kürzel"]}_{selected["Titel"]}'
+        #Logik für Preview:
+        if ((SelectPreviewPDF=="Tabelle anzeigen" and checkbox_allyears==False) and new_selected_df.empty == False): 
+            preview_df = df_datenjahre_jahre[(df_datenjahre_jahre['Jahrbuecher']==new_selected_df["Jahrbuecher"].iat[0]) | 
+            (df_datenjahre_jahre['Jahrbuecher']==new_selected_df["Jahrbuecher"].iat[-1])] 
+            with placeholderTextPreview.container():
+                st.markdown(tools.text_preview(new_selected_df)) 
+            with placeholderPreviewContainer.container():
+                tools.show_preview(preview_df, end_page) 
+            tools.delete_temp()
+
+        elif (SelectPreviewPDF=="Tabelle anzeigen" and checkbox_allyears==True): 
+            preview_df = df_datenjahre_jahre[(df_datenjahre_jahre['Jahrbuecher']==after_slider_df["Jahrbuecher"].iat[0]) | 
+            (df_datenjahre_jahre['Jahrbuecher']==after_slider_df["Jahrbuecher"].iat[-1])]
+            with placeholderTextPreview.container():
+                st.markdown(tools.text_preview(after_slider_df)) 
+            with placeholderPreviewContainer.container():
+                tools.show_preview(preview_df, end_page) 
+            tools.delete_temp()
+        #Logik für PDF-Dokument: 
+        elif (SelectPreviewPDF=="PDF-Dokument erstellen" and checkbox_allyears==False and new_selected_df.empty == False):   
+            placeholderSlider.empty()
+            placeholderTableContainer.empty()
+            placeholderEndPage.empty()
+            placeholderCheckbox.empty()
+            get_pdf = tools.spinner(new_selected_df,end_page)
+            st.markdown(CHANGE_STYLE_DOWNLOADBUTTON, unsafe_allow_html=True)  
+            placeholderButtonDownload.download_button(label=f'PDF Herunterladen', 
+            data=get_pdf, file_name=f"{name}.pdf",mime='application/octet-stream', key="download1", on_click=tools.clickhandle)
+        elif  (SelectPreviewPDF=="PDF-Dokument erstellen" and checkbox_allyears==True):   
+            placeholderSlider.empty()
+            placeholderTableContainer.empty()
+            placeholderEndPage.empty()
+            placeholderCheckbox.empty()
+            get_pdf = tools.spinner(after_slider_df,end_page)
+            st.markdown(CHANGE_STYLE_DOWNLOADBUTTON, unsafe_allow_html=True)   
+            placeholderButtonDownload.download_button(label=f'PDF Herunterladen', 
+            data=get_pdf, file_name=f"{name}.pdf",mime='application/octet-stream', key="download1", on_click=tools.clickhandle)
+        elif (SelectPreviewPDF=="" and checkbox_allyears==False and new_selected_df.empty == True): 
+            st.info("Selektieren Sie in der oberen Tabelle mindestens ein Jahrbuch oder aktivieren Sie das Feld 'Ich möchte alle Jahrbücher aus der gewählten Zeitspanne'.")
+        elif (SelectPreviewPDF==""): 
+            st.info("Wählen Sie zwischen 'Tabelle anzeigen' oder 'PDF-Dokument erstellen' aus.")
+        else: 
+            st.info("Selektieren Sie in der oberen Tabelle mindestens ein Jahrbuch oder aktivieren Sie das Feld 'Ich möchte alle Jahrbücher aus der gewählten Zeitspanne'.")
+ 
+        
     def show_menu(self):
+
         df_metadata_filtered,jahrgang, jahrgang_box = self.get_tabelle() 
 
         #Wenn die spezifische Jahrbuchsuchfunktion nicht aktiviert ist:
@@ -217,9 +331,13 @@ class App():
             in welchen Jahrbüchern Daten vorhanden sind. Die Jahrbücher werden als interaktive Links angezeigt.__''')
             selected = tools.show_table(df_metadata_filtered, GridUpdateMode.SELECTION_CHANGED, 310, col_cfg=COL_CFG)
             if len(selected) > 0: 
+                # col1, col2 = st.columns(2)
+                #with col1:
                 df_datenjahre_jahre = tools.make_dataframe(selected,self.positionsliste)
-                self.show_jahrbuecher(selected[0],df_datenjahre_jahre) 
-           
+                #    self.show_jahrbuecher(selected[0],df_datenjahre_jahre)
+                #with col2:
+                self.show_preview_download_pdf(selected[0], df_datenjahre_jahre)
+
         #Wenn die spezifische Jahrbuchsuchfunktion aktiviert ist:
         else:
             st.markdown('<br><br>', unsafe_allow_html=True)

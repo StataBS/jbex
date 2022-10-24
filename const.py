@@ -26,8 +26,10 @@ THEMENBEREICHE = [
 
 TABELLEN_FILE = './data/metadaten.txt'
 POSITIONSLISTEN_FILE = './data/positionsliste.txt'
+TEMP = './temp/'
 URL_BASE = 'https://charts.basleratlas.ch/zahlenspiegel/files/Stat-JB-BS-'
 URL_STAT_BASEL = 'https://www.statistik.bs.ch/'
+JAHRBUCH_ORDNER = 'P:/1_Arbeitsbereiche/5_Publikationen/4_Jahrbuch\PDF-Archiv'
 
 THEMEN = {
 'Bevölkerung': ['Übergeordnete Bevölkerungsentwicklung',
@@ -135,23 +137,26 @@ THEMEN = {
 'Grundversorgung'],
 }
 
-JAHRBUECHER = list(range(1921,1980,1))+ list(range(1981,(date.today().year),1))
 
-COL_CFG = [{"name":"Titel","width":400,"suppressSizeToFit":False},
-                    {"name":"Themenbereich","width":120,"suppressSizeToFit":False},
-                    {"name":"Thema","width":120,"suppressSizeToFit":False}]
+
+COL_CFG = [{"name":"Titel","width":400,"suppressSizeToFit":"false", "vis":"false"},
+                    {"name":"Themenbereich","width":120,"suppressSizeToFit":"false", "vis":"false"},
+                    {"name":"Thema","width":120,"suppressSizeToFit":"false", "vis":"false"}]
+
+COL_CFG_2 =[{"name":"Jahrbuecher","width":100,"suppressSizeToFit":"false", "vis":"false"},{"name":"Datenjahre","width":100,"suppressSizeToFit":"false", "vis":"false"}]
 
 CHANGE_STYLE_MULTI1 = '''
 <style>
 div.row-widget.stMultiSelect>div[data-baseweb="select"]>div>div>div:nth-child(2n+0){visibility: hidden;}
 div.row-widget.stMultiSelect>div[data-baseweb="select"]>div>div>div:nth-child(2n+0)::before{content: "Option wählen"; visibility: visible;}
 div.row-widget.stMultiSelect>div[data-baseweb="select"]>div>div:first-child{color:#e3e3e3;}
+div.row-widget-stMultiSelect>div[data-baseweb="select"]
 </style>'''
 
 
 CHANGE_STYLE_ANLEITUNG =''' 
 <style>
-div.streamlit-expanderHeader{font-size:16px}
+div.streamlit-expanderHeader{font-size: 16px}
 </style>
 '''
 
@@ -160,13 +165,36 @@ CHANGE_STYLE_CLEARBUTTON='''
 div.stButton>button:first-child{font-size: 9px;}
 </style>'''
 
+CHANGE_STYLE_DOWNLOADBUTTON='''
+<style> 
+div.stDownloadButton>button:first-child{font-size: 16px; background-color: #0A3B19; color: white}
+</style>'''
 
-DICT_DTYPE =  {
-    "Kürzel": str,
-    "ID": int,
-    "Titel": str,
-    "Typ": str,
-    "Sort": int,
-    "Lauf-Nr.": int,
-    
-}
+
+CHANGE_STYLE_SLIDER = ''' 
+<style> 
+div.stSlider>div{width: 90%; padding-left: 15px}
+div.stSlider>label{font-size: 16px}
+div.StyledThumbValue{font-size:10px}
+</style>
+'''
+
+CHANGE_STYLE_NUMBERINPUT = '''
+<style> 
+div.stNumberInput>label{width: 700px; font-size: 16px}
+div.stNumberInput>div{width: 700px;}
+</style>
+'''
+CHANGE_STYLE_CHECKBOX= '''
+<style> 
+div.row-widget.stCheckbox{margin-top: 28px}
+</style>
+'''
+
+CHANGE_STYLE_SELECTBOX= '''
+<style> 
+div.row-widget>label{width: 700px; font-size: 16px}
+div.row-widget.stSelectbox>div[data-baseweb="select"]>div{width: 700px;}
+</style>
+'''
+

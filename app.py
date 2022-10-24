@@ -10,11 +10,12 @@ import jbex_find
 import requests
 import json
 import tools
+import streamlit.components.v1 as components
 
 
-__author__ = 'Lukas Calmbach'
-__version__ = '0.1.1'
-version_date = '2022-01-04'
+__author__ = 'Lukas Calmbach & Niklaus Baltisberger'
+__version__ = '1.2.0'
+version_date = '2022-10-24'
 my_name = 'Jahrbuch-App'
 my_name_short = 'JBEx'
 
@@ -76,9 +77,10 @@ def remove_menu():
 
 def clear_button():
     st.markdown(CHANGE_STYLE_CLEARBUTTON, unsafe_allow_html=True)
-    button1=st.button(label="Clear Cache", key="button1")
+    button1=st.button(label="Clear Cache", key="button2")
     if button1:
         st.legacy_caching.clear_cache()
+        st.experimental_rerun()
 
 
 def show_titel():
@@ -91,13 +93,14 @@ def show_titel():
 
 
 def initial_widget_states():
-    for key in ["multi1","text1","check1"]:
+    for key in ["multi1","multi2","text1","check1"]:
         if key not in st.session_state:
             st.session_state["multi1"]=[]
+            st.session_state["multi2"]=[]
             st.session_state["text1"]=""
             st.session_state["check1"]=False
-
-
+            
+           
 def print_anleitung():
     if st.session_state.get("check1")==False:
         if st.session_state.get("multi1")==[]:
@@ -151,6 +154,7 @@ def main():
     #Anleitung Ein-und Ausklappen
     print_anleitung()
     st.markdown(f'<p style="font-size:16px";><br></p><br>', unsafe_allow_html=True)
+
     
     #Metadaten initiieren
     metadata, positionsliste = get_data()
@@ -163,6 +167,7 @@ def main():
     st.markdown(get_app_info(), unsafe_allow_html=True)
     st.markdown('<br>', unsafe_allow_html=True)
     #clear_button()
+
 
 
 if __name__ == '__main__':
