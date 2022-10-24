@@ -181,8 +181,8 @@ div.StyledThumbValue{font-size:10px}
 
 CHANGE_STYLE_NUMBERINPUT = '''
 <style> 
-div.stNumberInput>label{width: 700px; font-size: 16px}
-div.stNumberInput>div{width: 700px;}
+div.stNumberInput>label{width: 100%; font-size: 16px}
+div.stNumberInput>div{width: 100%;}
 </style>
 '''
 CHANGE_STYLE_CHECKBOX= '''
@@ -193,8 +193,8 @@ div.row-widget.stCheckbox{margin-top: 28px}
 
 CHANGE_STYLE_SELECTBOX= '''
 <style> 
-div.row-widget>label{width: 700px; font-size: 16px}
-div.row-widget.stSelectbox>div[data-baseweb="select"]>div{width: 700px;}
+div.row-widget>label{width: 100%; font-size: 16px}
+div.row-widget.stSelectbox>div[data-baseweb="select"]>div{width: 100%;}
 </style>
 '''
 
