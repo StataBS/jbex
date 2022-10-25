@@ -16,7 +16,7 @@ import streamlit.components.v1 as components
 __author__ = 'Lukas Calmbach & Niklaus Baltisberger'
 __version__ = '1.2.0'
 version_date = '2022-10-24'
-my_name = 'Jahrbuch-App'
+my_name = 'Jahrbuch-Web-App'
 my_name_short = 'JBEx'
 
 
